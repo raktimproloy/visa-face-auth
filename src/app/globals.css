@@ -1,0 +1,109 @@
+@import "tailwindcss";
+:root {
+  --background: #ffffff;
+  --foreground: #26203B;
+  /* --font-inter: "Inter", sans-serif;
+  --font-open-sans: "Open Sans", sans-serif; */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-inter: var(--font-inter);
+  --font-open-sans: var(--font-open-sans);
+}
+/* 
+@media (prefers-color-scheme: theme) {
+  :root {
+    --background: #26203B;
+    --foreground: #fff;
+  }
+} */
+
+body {
+  /* background: #fff; */
+  color: #26203B;
+  font-family: var(--font-inter);
+  overflow-x: hidden;
+}
+.form-control{
+  border-radius: 8px;
+  border: 1px solid rgba(70, 95, 241, 0.40);
+  background: #FFF;
+  box-shadow: 0 4px 8px 0 rgba(70, 95, 241, 0.10);
+  height: 48px;
+  outline: none;
+  padding: 8px 16px;
+  width: 100%;
+  display: block;
+  font-weight: 500;
+}
+button{
+  cursor: pointer;
+}
+.bg-grad{
+  background: linear-gradient(90deg, #B706FF 7.81%, #8E0597 47.73%, #431151 95.19%);
+}
+.bottom-box{
+  border-radius: 20px;
+  background: #FFF;
+  box-shadow: 1px 1px 0 2px rgba(0, 0, 0, 0.25);
+  padding: 24px;
+  max-width: 660px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+  position: relative;
+  bottom: -40px;
+}
+.mobile-btn{
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.20);
+  box-shadow: 8px 4px 16px 0 rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(12px);
+  color: #FFF;
+  font-size: 20px;
+  padding: 17px 80px;
+  display: inline-block;
+  min-width: 313px;
+  text-align: center;
+  margin: 0 auto;
+  font-weight: 600;
+  &.two{
+    border-radius: 24px;
+    background: rgba(150, 150, 150, 0.20);
+    box-shadow: 8px 4px 16px 0 rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(12px);
+    color: #323232 !important;
+  }
+}
+.sm-btn{
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.20);
+  box-shadow: 8px 4px 16px 0 rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(12px);
+  color: #EBEBEB;
+  font-size: 20px;
+  font-weight: 600;
+  display: block;
+  width: 313px;
+  height: 42px;
+  padding: 5px 82px;
+  margin: 0 auto;
+  &.two{
+    border-radius: 24px;
+    background: rgba(205, 204, 204, 0.75);
+    box-shadow: 8px 4px 16px 0 rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(12px);
+  }
+}
+
+
+.sc-hvigdm{
+  max-width: 660px;
+  position: relative;
+  height: 100vh !important;
+  padding-bottom: 0 !important;
+}
+.cWVvvv{
+  height: 100vh !important;
+}
