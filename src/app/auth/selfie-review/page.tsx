@@ -3,11 +3,8 @@ import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../../../store/hooks";
 import { useRouter } from "next/navigation";
 import { setUploadedPhotoUrl, setBiometricEnrollmentData } from "../../../store/slices/authSlice";
-import { uploadPhotoToS3 } from "../../../utils/s3Upload";
-import { enrollBiometrics, generateCustomerId, generateEnrollmentId } from "../../../utils/biometricEnrollment";
 import Image from "next/image";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
-
 
 export default function SelfieReviewPage() {
   // Auth protection - redirect to register if no user data
@@ -33,58 +30,57 @@ export default function SelfieReviewPage() {
     setUploadError(null);
 
     try {
-      // Step 1: Upload photo to S3
-      console.log('Step 1: Uploading photo to S3...');
-      const uploadResult = await uploadPhotoToS3(registrationData.photo, 'selfie.jpg');
-      
-      if (!uploadResult.success || !uploadResult.photoUrl) {
-        throw new Error(uploadResult.error || 'S3 upload failed');
-      }
-
-      // Update Redux with the S3 URL
-      dispatch(setUploadedPhotoUrl(uploadResult.photoUrl));
-      console.log('Photo uploaded successfully to S3:', uploadResult.photoUrl);
-
-      // Step 2: Enroll biometrics via IDMission Lambda
-      console.log('Step 2: Starting biometric enrollment...');
-      
-      // Generate unique IDs for the user
-      const customerId = generateCustomerId();
-      const enrollmentId = generateEnrollmentId();
-      
-      // Get user data with dummy data if needed
+      // Prepare user data for the API
       const userData = {
-        customerId,
-        enrollmentId,
-        name: `${registrationData.firstName || 'John'} ${registrationData.lastName || 'Doe'}`.trim() || 'John Doe',
-        email: registrationData.email || 'john.doe@example.com',
-        password: registrationData.password || 'password123',
-        photoUrl: uploadResult.photoUrl,
-        photoData: registrationData.photo, // Original base64 photo data
+        firstName: registrationData.firstName || '',
+        lastName: registrationData.lastName || '',
+        email: registrationData.email || '',
+        password: registrationData.password || ''
       };
 
-      const enrollmentResult = await enrollBiometrics(userData);
-      
-      if (!enrollmentResult.success) {
-        throw new Error(enrollmentResult.error || 'Biometric enrollment failed');
+      // Call our updated upload API that handles S3, DynamoDB, and Lambda
+      const response = await fetch('/api/upload-photo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          photoData: registrationData.photo,
+          fileName: 'selfie.jpg',
+          userData
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Upload failed');
       }
 
-      // Update Redux with enrollment data
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Upload failed');
+      }
+
+      // Update Redux with the S3 URL and user IDs
+      dispatch(setUploadedPhotoUrl(result.photoUrl));
       dispatch(setBiometricEnrollmentData({
-        customerId: enrollmentResult.customerId!,
-        enrollmentId: enrollmentResult.enrollmentId!,
-        biometricStatus: enrollmentResult.biometricStatus!,
-        idmissionValid: enrollmentResult.idmissionValid!,
+        customerId: result.customerId,
+        enrollmentId: result.enrollmentId,
+        biometricStatus: 'pending',
+        idmissionValid: false,
       }));
 
-      console.log('Biometric enrollment completed successfully:', enrollmentResult);
+      console.log('Upload completed successfully:', result);
+      console.log('User created with ID:', result.customerId);
+      console.log('Biometric enrollment initiated for:', result.enrollmentId);
       
       // Navigate to success page
       router.push('/auth/success');
       
     } catch (error) {
-      console.error('Upload/Enrollment error:', error);
-      setUploadError(error instanceof Error ? error.message : 'Failed to complete process. Please try again.');
+      console.error('Upload error:', error);
+      setUploadError(error instanceof Error ? error.message : 'Failed to complete upload. Please try again.');
     } finally {
       setIsUploading(false);
     }
@@ -152,10 +148,10 @@ export default function SelfieReviewPage() {
             {isUploading ? (
               <div className="flex items-center justify-center gap-2">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#28A300]"></div>
-                Uploading...
+                Uploading & Creating Account...
               </div>
             ) : (
-              'Upload'
+              'Upload & Create Account'
             )}
           </button>
           

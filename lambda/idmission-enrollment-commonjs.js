@@ -1,5 +1,5 @@
-// IDMission Biometric Enrollment Lambda Function
-import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+// IDMission Biometric Enrollment Lambda Function (CommonJS Version)
+const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
 
 // IDMission API Configuration
 const IDMISSION_CONFIG = {
@@ -12,7 +12,7 @@ const IDMISSION_CONFIG = {
   apiSecret: process.env.IDMISSION_API_SECRET
 };
 
-export const handler = async (event) => {
+exports.handler = async (event) => {
   try {
     console.log('IDMission enrollment event:', JSON.stringify(event, null, 2));
     

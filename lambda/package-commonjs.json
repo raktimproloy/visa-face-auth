@@ -1,0 +1,16 @@
+{
+  "name": "idmission-enrollment-lambda-commonjs",
+  "version": "1.0.0",
+  "description": "Lambda function for IDMission biometric enrollment (CommonJS)",
+  "main": "idmission-enrollment-commonjs.js",
+  "scripts": {
+    "package": "zip -r function.zip . -x '*.zip' 'node_modules/*' '.git/*'",
+    "deploy": "aws lambda update-function-code --function-name idmission-enrollment --zip-file fileb://function.zip"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.872.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
