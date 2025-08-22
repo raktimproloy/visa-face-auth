@@ -208,11 +208,11 @@ export default function SelfiePage() {
           <div className="absolute mt-10 top-0 left-0 right-0">
             <button className="sm-btn">Hold Still</button>
           </div>
-          <div className="absolute mb-10 bottom-0 left-0 right-0">
+          <div className="absolute mb-10 bottom-15 left-0 right-0">
               
             <button
               onClick={takePhoto}
-              className="mobile-btn !flex items-center gap-2 max-w-[313px] !px-10 mt-10"
+              className="mobile-btn !flex items-center gap-2 max-w-[313px] !px-10 mt-0"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
