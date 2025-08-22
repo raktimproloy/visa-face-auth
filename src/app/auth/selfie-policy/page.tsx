@@ -104,7 +104,7 @@ export default function SelfiePolicyPage() {
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-5 max-w-[290px] mx-auto mt-12 mb-14 text-white">
+        <div className="grid grid-cols-2 gap-5 max-w-[290px] mx-auto mt-12 mb-6 text-white">
           <div className="text-center">
             <Image
               src={"/images/01.png"}
@@ -127,11 +127,11 @@ export default function SelfiePolicyPage() {
           <label className="flex items-center gap-2 text-xs  font-medium max-w-[230px] mx-auto text-white">
             <input type="checkbox" />I agree to the privacy policy
           </label>
-          <div className="text-center  mt-12 max-auto">
+          <div className="text-center  mt-4 max-auto">
             
           <Link
             href={"/auth/selfie"}
-            className="mobile-btn !text-[#323232]"
+            className="mobile-btn !text-[#323232] mb-5"
           >
             Take A Selfie
           </Link>

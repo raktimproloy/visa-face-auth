@@ -266,8 +266,8 @@ export default function SelfieReviewPage() {
             src={registrationData.photo}
             alt="Captured selfie"
             width={424}
-            height={500}
-            className="max-h-[500px] max-w-full rounded-lg shadow-lg"
+            height={300}
+            className="max-w-full rounded-lg shadow-lg mx-auto h-[300px]"
             style={{ maxWidth: '424px' }}
           />
         </div>

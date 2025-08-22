@@ -28,7 +28,7 @@ export default function RegisterPage() {
   const separateFullName = (fullName: string) => {
     const nameParts = fullName.trim().split(' ');
     if (nameParts.length === 1) {
-      return { firstName: nameParts[0], lastName: '' };
+      return { firstName: nameParts[0], lastName: 'User' }; // Default last name if only one name provided
     } else if (nameParts.length >= 2) {
       const firstName = nameParts[0];
       const lastName = nameParts.slice(1).join(' ');
@@ -44,6 +44,15 @@ export default function RegisterPage() {
   };
 
   const handleCreateAccount = async () => {
+    console.log('Starting registration process...');
+    
+    // Clear all previous errors
+    setEmailError("");
+    setFullNameError("");
+    setPasswordError("");
+    setConfirmPasswordError("");
+    setAcceptTermsError("");
+    
     if (!fullName || !email || !password || !confirmPassword) {
       setEmailError("Please fill in all fields");
       return;
@@ -65,12 +74,15 @@ export default function RegisterPage() {
     }
 
     const { firstName, lastName } = separateFullName(fullName);
-    if (!firstName || !lastName) {
-      setFullNameError("Please enter your full name (first and last name)");
+    console.log('Name separation result:', { firstName, lastName });
+    
+    if (!firstName) {
+      setFullNameError("Please enter at least your first name");
       return;
     }
 
     setIsSubmitting(true);
+    console.log('Sending registration request with:', { firstName, lastName, email });
     
     try {
       // Register user directly with the new API
@@ -152,13 +164,16 @@ export default function RegisterPage() {
           <div className="col-span-1 mb-7">
             <input
               type="text"
-              className="form-control-glass"
+              className={`form-control-glass ${fullNameError ? 'border-red-400' : ''}`}
               id="full_name"
               name="full_name"
               placeholder="Enter your full name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
+            {fullNameError && (
+              <p className="text-red-400 text-sm mt-1">{fullNameError}</p>
+            )}
           </div>
 
           {/* Email */}
@@ -249,7 +264,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Terms Checkbox */}
-          <div className="col-span-1 mb-3 flex justify-center">
+          <div className="col-span-1 mb-3 flex justify-center flex-col items-center">
             <div className="terms-checkbox">
               <input
                 type="checkbox"
@@ -262,24 +277,44 @@ export default function RegisterPage() {
                 Accept the <strong className="text-blue-400">Terms and Service</strong>
               </label>
             </div>
+            {acceptTermsError && (
+              <p className="text-red-400 text-sm mt-1">{acceptTermsError}</p>
+            )}
           </div>
 
           {/* Submit button */}
-          <div className="col-span-1 mt-0 text-center">
+          <div className="col-span-1 mt-8 text-center">
             <button
-              onClick={handleCreateAccount}
-              className={`mobile-btn !text-[#323232] !mx-auto ${
+              onClick={(e) => {
+                console.log('Button clicked!', e);
+                console.log('Form state:', { fullName, email, password, confirmPassword, acceptTerms });
+                e.preventDefault();
+                handleCreateAccount();
+              }}
+              onTouchStart={() => {}} // Ensure touch events work
+              className={`mobile-btn !text-[#323232] !mx-auto !relative !z-20 !touch-manipulation ${
                 isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               type="button"
               disabled={isSubmitting}
+              style={{
+                WebkitTapHighlightColor: 'transparent',
+                WebkitTouchCallout: 'none',
+                WebkitUserSelect: 'none',
+                userSelect: 'none'
+              }}
             >
               {isSubmitting ? 'Creating Account...' : 'Create Account'}
             </button>
+            
           </div>
+          
+          {/* Sign in link */}
+          <div className="col-span-1 mt-4 text-center">
             <p className="text-md text-[#9C9AA5]">
-              Have an account? <Link href="/auth/login" className="text-blue-500 ">Sign in</Link>
+              Have an account? <Link href="/auth/login" className="text-blue-500">Sign in</Link>
             </p>
+          </div>
         </form>
       </div>
     </div>

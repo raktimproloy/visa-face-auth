@@ -161,10 +161,28 @@ button{
   font-size: 20px;
   padding: 17px 80px;
   display: inline-block;
-  min-width: 313px;
+  min-width: 280px;
+  max-width: 90vw;
   text-align: center;
   margin: 0 auto;
   font-weight: 600;
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 8px 6px 20px 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
   &.two{
     border-radius: 24px;
     background: rgba(150, 150, 150, 0.20);
@@ -203,4 +221,50 @@ button{
 }
 .cWVvvv{
   height: 100vh !important;
+}
+
+/* Mobile-specific button styles */
+@media (max-width: 768px) {
+  .mobile-btn {
+    min-width: 250px;
+    max-width: 85vw;
+    padding: 16px 60px;
+    font-size: 18px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 50;
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+  
+  /* Ensure form elements don't overlap */
+  .form-control-glass {
+    margin-bottom: 16px;
+  }
+  
+  /* Improve touch targets */
+  .password-toggle-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .terms-checkbox input[type="checkbox"] {
+    min-width: 2px;
+    min-height: 2px;
+  }
+  
+  /* Ensure button container is properly positioned */
+  .col-span-1 {
+    position: relative;
+    z-index: 10;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-btn {
+    min-width: 220px;
+    max-width: 80vw;
+    padding: 14px 50px;
+    font-size: 16px;
+  }
 }
