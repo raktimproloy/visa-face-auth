@@ -3,8 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAppSelector } from "../../../store/hooks";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
+import { useRouter } from "next/navigation";
 
 export default function FinalPage() {
+  const router = useRouter();
   // Auth protection - redirect to register if no user data
   const { isAuthenticated } = useAuthProtection();
   const { registrationData } = useAppSelector((state) => state.auth);
@@ -31,48 +33,50 @@ export default function FinalPage() {
     customerId: registrationData?.customerId
   });
 
-  // Check if user has completed enrollment OR biometric verification
-  // Allow access if EITHER status is 'completed' (using OR logic)
-  const hasCompletedEnrollment = registrationData?.enrollmentStatus === 'completed';
+  // Check if user has completed biometric verification
+  // Only allow access if biometric status is 'completed'
   const hasCompletedBiometric = registrationData?.biometricStatus === 'completed';
-  const canAccessFinalPage = hasCompletedEnrollment || hasCompletedBiometric;
+  const canAccessFinalPage = hasCompletedBiometric;
 
   if (!canAccessFinalPage) {
-    console.log('FinalPage - Access denied, status not complete');
-    console.log('FinalPage - enrollmentStatus:', registrationData?.enrollmentStatus);
+    console.log('FinalPage - Access denied, biometric status not complete');
     console.log('FinalPage - biometricStatus:', registrationData?.biometricStatus);
+    router.push('/auth/selfie-policy');
+    return null;
+    // console.log('FinalPage - Access denied, status not complete');
+    // console.log('FinalPage - enrollmentStatus:', registrationData?.enrollmentStatus);
+    // console.log('FinalPage - biometricStatus:', registrationData?.biometricStatus);
     
-    return (
-      <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
-        <div className="w-full text-center">
-          <div className="max-w-[400px] mx-auto px-4">
-            <h2 className="text-xl font-semibold text-[#3F3F3F] mb-4">
-              Enrollment Not Complete
-            </h2>
-            <p className="text-sm text-[#3F3F3F] font-medium mb-6">
-              Your enrollment or biometric verification is not complete. Please complete the face verification process.
-            </p>
+    // return (
+    //   <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
+    //     <div className="w-full text-center">
+    //       <div className="max-w-[400px] mx-auto px-4">
+    //         <h2 className="text-xl font-semibold text-[#3F3F3F] mb-4">
+    //           Enrollment Not Complete
+    //         </h2>
+    //         <p className="text-sm text-[#3F3F3F] font-medium mb-6">
+    //           Your enrollment or biometric verification is not complete. Please complete the face verification process.
+    //         </p>
             
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <p className="text-sm text-yellow-800">
-                <strong>Current Status:</strong><br />
-                Enrollment: {registrationData?.enrollmentStatus || 'Not set'}<br />
-                Biometric: {registrationData?.biometricStatus || 'Not set'}
-              </p>
-            </div>
+    //         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+    //           <p className="text-sm text-yellow-800">
+    //             <strong>Current Status:</strong><br />
+    //             Enrollment: {registrationData?.enrollmentStatus || 'Not set'}<br />
+    //             Biometric: {registrationData?.biometricStatus || 'Not set'}
+    //           </p>
+    //         </div>
             
-            <Link href="/auth/selfie-policy" className="mobile-btn !text-[#323232] !mt-4 !inline-block">
-              Continue Enrollment
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
+    //         <Link href="/auth/selfie-policy" className="mobile-btn !text-[#323232] !mt-4 !inline-block">
+    //           Continue Enrollment
+    //         </Link>
+    //       </div>
+    //     </div>
+    //   </div>
+    // );
   }
   
   console.log('FinalPage - Access granted, showing final page');
   console.log('FinalPage - User completed:', {
-    enrollment: hasCompletedEnrollment,
     biometric: hasCompletedBiometric
   });
   console.log('FinalPage - Full user data:', registrationData);

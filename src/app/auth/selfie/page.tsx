@@ -95,20 +95,11 @@ export default function SelfiePage() {
     );
   }
 
-  // Validate enrollment status
-  if (registrationData?.enrollmentStatus !== 'pending') {
-    return (
-      <div className="!bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-9">
-        <div className="w-full text-center">
-          <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5">
-            Invalid Enrollment Status
-          </button>
-          <p className="text-sm text-[#3E3E3E]">
-            Your enrollment status is not valid. Please register again.
-          </p>
-        </div>
-      </div>
-    );
+  // Check if user has already completed biometric verification
+  if (registrationData?.biometricStatus === 'completed') {
+    // Redirect to final page if biometric is already completed
+    window.location.href = '/auth/final';
+    return null;
   }
 
   // Show loading state

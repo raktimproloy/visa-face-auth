@@ -57,15 +57,12 @@ export default function LoginPage() {
           photo: result.user.photoUrl
         }));
 
-        // Redirect based on enrollment or biometric status
-        if (result.user.enrollmentStatus === 'pending' && result.user.biometricStatus !== 'completed') {
-          console.log('User enrollment pending, redirecting to selfie-policy');
-          router.push('/auth/selfie-policy');
-        } else if (result.user.enrollmentStatus === 'completed' || result.user.biometricStatus === 'completed') {
-          console.log('User enrollment or biometric completed, redirecting to final');
+        // Redirect based on biometric status
+        if (result.user.biometricStatus === 'completed') {
+          console.log('User biometric completed, redirecting to final page');
           router.push('/auth/final');
         } else {
-          console.log('User status unclear, redirecting to selfie-policy');
+          console.log('User biometric not completed, redirecting to selfie-policy');
           router.push('/auth/selfie-policy');
         }
       } else {

@@ -17,13 +17,20 @@ export default function SelfieReviewPage() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+  // Check if user has already completed biometric verification
+  if (registrationData?.biometricStatus === 'completed') {
+    // Redirect to final page if biometric is already completed
+    window.location.href = '/auth/final';
+    return null;
+  }
+
   const handleRetake = () => {
     router.push('/auth/selfie');
   };
 
   const handleUpload = async () => {
     // Validate enrollment status and authentication
-    if (!registrationData?.customerId || registrationData?.enrollmentStatus !== 'pending') {
+    if (!registrationData?.customerId) {
       setUploadError('Invalid enrollment status. Please register again.');
       return;
     }
@@ -196,7 +203,7 @@ export default function SelfieReviewPage() {
           }
           
           // Show rejection message and redirect back to selfie page
-          setUploadError(`Enrollment not approved. Reason: ${enrollmentData.verificationResult}. Please try again with a better photo.`);
+          setUploadError(`Enrollment not approved. Try again with a better photo.`);
           
           // Redirect after showing error message
           setTimeout(() => {

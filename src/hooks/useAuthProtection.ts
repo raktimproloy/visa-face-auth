@@ -16,6 +16,7 @@ export const useAuthProtection = () => {
       console.log('useAuthProtection - checking auth, registrationData:', {
         hasCustomerId: !!registrationData?.customerId,
         enrollmentStatus: registrationData?.enrollmentStatus,
+        biometricStatus: registrationData?.biometricStatus,
         hasData: !!registrationData
       });
       
@@ -28,23 +29,41 @@ export const useAuthProtection = () => {
             biometricStatus: registrationData.biometricStatus
           });
           
-          // Check if user should be redirected based on enrollment or biometric status
-          if (registrationData.enrollmentStatus === 'pending' && registrationData.biometricStatus !== 'completed') {
-            // User is in pending status and biometric not completed, allow access to selfie flow
-            setIsAuthenticated(true);
-            setIsLoading(false);
-            return;
-          } else if (registrationData.enrollmentStatus === 'completed' || registrationData.biometricStatus === 'completed') {
-            // User has completed enrollment or biometric verification
-            // Allow access to both success and final pages
-            if (window.location.pathname === '/auth/success' || window.location.pathname === '/auth/final') {
-              console.log('User on success or final page, allowing access');
+          // Check biometric status for routing
+          const isBiometricCompleted = registrationData.biometricStatus === 'completed';
+          const currentPath = window.location.pathname;
+          
+          if (isBiometricCompleted) {
+            // User has completed biometric verification
+            // Can only access final and success pages
+            if (currentPath === '/auth/final' || currentPath === '/auth/success') {
+              console.log('User biometric completed, allowing access to final/success page');
               setIsAuthenticated(true);
               setIsLoading(false);
               return;
             } else {
-              console.log('User enrollment/biometric completed, redirecting to success page');
-              router.push('/auth/success');
+              // Redirect to final page if trying to access selfie-related pages
+              console.log('User biometric completed, redirecting to final page');
+              router.push('/auth/final');
+              return;
+            }
+          } else {
+            // User has NOT completed biometric verification
+            // Can only access selfie-related pages
+            if (currentPath === '/auth/selfie-policy' || currentPath === '/auth/selfie' || currentPath === '/auth/selfie-review') {
+              console.log('User biometric not completed, allowing access to selfie pages');
+              setIsAuthenticated(true);
+              setIsLoading(false);
+              return;
+            } else if (currentPath === '/auth/final' || currentPath === '/auth/success') {
+              // Redirect to selfie-policy if trying to access final/success pages
+              console.log('User biometric not completed, redirecting to selfie-policy');
+              router.push('/auth/selfie-policy');
+              return;
+            } else {
+              // Allow access to other pages (like register, login)
+              setIsAuthenticated(true);
+              setIsLoading(false);
               return;
             }
           }
@@ -78,26 +97,43 @@ export const useAuthProtection = () => {
             }));
           }
           
-          // Check enrollment or biometric status and handle routing
-          if (authData.user.enrollmentStatus === 'pending' && authData.user.biometricStatus !== 'completed') {
-            setIsAuthenticated(true);
-          } else if (authData.user.enrollmentStatus === 'completed' || authData.user.biometricStatus === 'completed') {
-            // User has completed enrollment or biometric verification
-            // Allow access to both success and final pages
-            if (window.location.pathname === '/auth/success' || window.location.pathname === '/auth/final') {
-              console.log('User on success or final page (JWT check), allowing access');
+          // Check biometric status and handle routing
+          const isBiometricCompleted = authData.user.biometricStatus === 'completed';
+          const currentPath = window.location.pathname;
+          
+          if (isBiometricCompleted) {
+            // User has completed biometric verification
+            // Can only access final and success pages
+            if (currentPath === '/auth/final' || currentPath === '/auth/success') {
+              console.log('User biometric completed (JWT check), allowing access to final/success page');
               setIsAuthenticated(true);
               setIsLoading(false);
               return;
             } else {
-              console.log('User enrollment/biometric completed, redirecting to success page');
-              router.push('/auth/success');
+              // Redirect to final page if trying to access selfie-related pages
+              console.log('User biometric completed (JWT check), redirecting to final page');
+              router.push('/auth/final');
               return;
             }
           } else {
-            console.log('User enrollment status not valid, redirecting to register');
-            router.push('/auth/register');
-            return;
+            // User has NOT completed biometric verification
+            // Can only access selfie-related pages
+            if (currentPath === '/auth/selfie-policy' || currentPath === '/auth/selfie' || currentPath === '/auth/selfie-review') {
+              console.log('User biometric not completed (JWT check), allowing access to selfie pages');
+              setIsAuthenticated(true);
+              setIsLoading(false);
+              return;
+            } else if (currentPath === '/auth/final' || currentPath === '/auth/success') {
+              // Redirect to selfie-policy if trying to access final/success pages
+              console.log('User biometric not completed (JWT check), redirecting to selfie-policy');
+              router.push('/auth/selfie-policy');
+              return;
+            } else {
+              // Allow access to other pages (like register, login)
+              setIsAuthenticated(true);
+              setIsLoading(false);
+              return;
+            }
           }
         } else {
           console.log('No valid auth token found, redirecting to register page');
@@ -114,7 +150,7 @@ export const useAuthProtection = () => {
     };
 
     checkAuth();
-  }, [router, registrationData]);
+  }, [router, registrationData, dispatch]);
 
   // If still loading, return loading state
   if (isLoading) {

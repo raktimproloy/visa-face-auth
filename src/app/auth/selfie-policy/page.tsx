@@ -23,17 +23,11 @@ export default function SelfiePolicyPage() {
     );
   }
 
-  // Validate enrollment status
-  if (registrationData?.enrollmentStatus !== 'pending') {
-    return (
-      <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
-        <div className="w-full text-center">
-          <p className="text-sm text-[#3F3F3F] font-medium">
-            Invalid enrollment status. Please register again.
-          </p>
-        </div>
-      </div>
-    );
+  // Check if user has already completed biometric verification
+  if (registrationData?.biometricStatus === 'completed') {
+    // Redirect to final page if biometric is already completed
+    window.location.href = '/auth/final';
+    return null;
   }
 
   return (

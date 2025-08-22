@@ -27,6 +27,13 @@ export default function SuccessPage() {
     );
   }
 
+  // Check if user has completed biometric verification
+  if (registrationData?.biometricStatus !== 'completed') {
+    // Redirect to selfie-policy if biometric is not completed
+    window.location.href = '/auth/selfie-policy';
+    return null;
+  }
+
   // Get user data with fallbacks
   const userData = {
     name: `${registrationData?.firstName || ''} ${registrationData?.lastName || ''}`.trim() || 'User',
