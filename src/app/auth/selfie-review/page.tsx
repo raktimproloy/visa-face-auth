@@ -257,7 +257,7 @@ export default function SelfieReviewPage() {
     <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-9">
       <div className="w-full">
         <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5">
-          Ready to verify your face?
+          Setisfied with your photo?
         </button>
         
         {/* Display captured photo */}
@@ -300,7 +300,7 @@ export default function SelfieReviewPage() {
                 Verifying Face...
               </div>
             ) : (
-              'Verify Face & Enroll'
+              'Upload'
             )}
           </button>
           

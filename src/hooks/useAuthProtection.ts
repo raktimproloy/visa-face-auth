@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
-import { setRegistrationData, setBiometricEnrollmentData, updateEnrollmentStatus } from '../store/slices/authSlice';
+import { setRegistrationData, setBiometricEnrollmentData, updateEnrollmentStatus, updateUserDataFromJWT } from '../store/slices/authSlice';
 
 export const useAuthProtection = () => {
   const router = useRouter();
@@ -34,20 +34,20 @@ export const useAuthProtection = () => {
             setIsAuthenticated(true);
             setIsLoading(false);
             return;
-                     } else if (registrationData.enrollmentStatus === 'completed' || registrationData.biometricStatus === 'completed') {
-             // User has completed enrollment or biometric verification
-             // Check if we're already on the success page to avoid redirect loops
-             if (window.location.pathname === '/auth/success') {
-               console.log('User already on success page, allowing access');
-               setIsAuthenticated(true);
-               setIsLoading(false);
-               return;
-             } else {
-               console.log('User enrollment/biometric completed, redirecting to success page');
-               router.push('/auth/success');
-               return;
-             }
-           }
+          } else if (registrationData.enrollmentStatus === 'completed' || registrationData.biometricStatus === 'completed') {
+            // User has completed enrollment or biometric verification
+            // Allow access to both success and final pages
+            if (window.location.pathname === '/auth/success' || window.location.pathname === '/auth/final') {
+              console.log('User on success or final page, allowing access');
+              setIsAuthenticated(true);
+              setIsLoading(false);
+              return;
+            } else {
+              console.log('User enrollment/biometric completed, redirecting to success page');
+              router.push('/auth/success');
+              return;
+            }
+          }
         }
 
         // Check if JWT token exists in cookies
@@ -66,7 +66,7 @@ export const useAuthProtection = () => {
           // Update Redux with user data from JWT to keep state synchronized
           if (!registrationData?.customerId || registrationData.customerId !== authData.user.customerId) {
             console.log('Updating Redux with JWT user data');
-            dispatch(setRegistrationData({
+            dispatch(updateUserDataFromJWT({
               customerId: authData.user.customerId,
               enrollmentId: authData.user.enrollmentId,
               firstName: authData.user.firstName,
@@ -81,20 +81,20 @@ export const useAuthProtection = () => {
           // Check enrollment or biometric status and handle routing
           if (authData.user.enrollmentStatus === 'pending' && authData.user.biometricStatus !== 'completed') {
             setIsAuthenticated(true);
-                     } else if (authData.user.enrollmentStatus === 'completed' || authData.user.biometricStatus === 'completed') {
-             // User has completed enrollment or biometric verification
-             // Check if we're already on the success page to avoid redirect loops
-             if (window.location.pathname === '/auth/success') {
-               console.log('User already on success page (JWT check), allowing access');
-               setIsAuthenticated(true);
-               setIsLoading(false);
-               return;
-             } else {
-               console.log('User enrollment/biometric completed, redirecting to success page');
-               router.push('/auth/success');
-               return;
-             }
-           } else {
+          } else if (authData.user.enrollmentStatus === 'completed' || authData.user.biometricStatus === 'completed') {
+            // User has completed enrollment or biometric verification
+            // Allow access to both success and final pages
+            if (window.location.pathname === '/auth/success' || window.location.pathname === '/auth/final') {
+              console.log('User on success or final page (JWT check), allowing access');
+              setIsAuthenticated(true);
+              setIsLoading(false);
+              return;
+            } else {
+              console.log('User enrollment/biometric completed, redirecting to success page');
+              router.push('/auth/success');
+              return;
+            }
+          } else {
             console.log('User enrollment status not valid, redirecting to register');
             router.push('/auth/register');
             return;

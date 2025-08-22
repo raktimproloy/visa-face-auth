@@ -38,6 +38,103 @@ body {
   display: block;
   font-weight: 500;
 }
+
+/* New blur glass input styles */
+.form-control-glass {
+  border-radius: 12px;
+  /* border: 1px solid rgba(255, 255, 255, 0.2); */
+  background: rgba(122, 122, 122, 0.342);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  height: 48px;
+  outline: none;
+  padding: 30px 24px;
+  width: 100%;
+  display: block;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.74);
+  transition: all 0.3s ease;
+}
+
+/* Dark overlay for background images */
+.bg-dark-overlay {
+  position: relative;
+}
+
+.bg-dark-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+.bg-dark-overlay > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Password input wrapper for eye icon */
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.3s ease;
+}
+
+.password-toggle-btn:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Checkbox styles */
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.terms-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #465FF1;
+  cursor: pointer;
+}
+
+.terms-checkbox label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.form-control-glass::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+}
+
+.form-control-glass:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.5);
+}
+
+.form-control-glass:focus::placeholder {
+  color: rgba(255, 255, 255, 0.9);
+}
 button{
   cursor: pointer;
 }

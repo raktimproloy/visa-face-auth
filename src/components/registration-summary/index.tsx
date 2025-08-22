@@ -20,7 +20,9 @@ export default function RegistrationSummary() {
         <p><strong>First Name:</strong> {registrationData.firstName}</p>
         <p><strong>Last Name:</strong> {registrationData.lastName}</p>
         <p><strong>Email:</strong> {registrationData.email}</p>
-        <p><strong>Password:</strong> {'•'.repeat(registrationData.password.length)}</p>
+        {registrationData.password && (
+          <p><strong>Password:</strong> {'•'.repeat(registrationData.password.length)}</p>
+        )}
         {registrationData.photo && (
           <div className="mt-3">
             <p><strong>Photo:</strong></p>

@@ -37,67 +37,74 @@ export default function SelfiePolicyPage() {
   }
 
   return (
-    <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
-      <div className="w-full">
+    <div className="relative !bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
+    <Image
+      src={"/images/mobile/bg-2.png"}
+      alt="logo"
+      quality={100}
+      fill={true}
+      className="mx-auto lg:object-contain object-cover absolute top-0 left-0 blur-xs"
+    />
+      <div className="w-full absolute top-0 left-0">
         <Image
-          src={"/icon-logo.svg"}
+          src={"/icon_logo.png"}
           alt="logo"
-          height={107}
-          width={136}
+          height={100}
+          width={100}
           quality={100}
-          className="mx-auto mb-12"
+          className="mx-auto mb-12 mt-10"
         />
         <div className="grid grid-cols-2 gap-5 max-w-[330px] mx-auto">
           <div className="text-center">
             <Image
-              src={"/images/mobile/icon/01.svg"}
+              src={"/icon/01.png"}
               alt="logo"
               width={26}
               height={21}
               className="mx-auto h-6"
             />
-            <p className="text-sm text-[#3F3F3F] font-medium mt-1">
+            <p className="text-sm  font-medium mt-1 text-white">
               Plain Background
             </p>
           </div>
           <div className="text-center">
             <Image
-              src={"/images/mobile/icon/02.svg"}
+              src={"/icon/03.png"}
               alt="logo"
               width={26}
               height={21}
               className="mx-auto h-6"
             />
-            <p className="text-sm text-[#3F3F3F] font-medium mt-1">
+            <p className="text-sm text-[#3F3F3F] font-medium mt-1 text-white">
               Use neutral expression
             </p>
           </div>
           <div className="text-center">
             <Image
-              src={"/images/mobile/icon/03.svg"}
+              src={"/icon/04.png"}
               alt="logo"
               width={26}
               height={21}
               className="mx-auto h-6"
             />
-            <p className="text-sm text-[#3F3F3F] font-medium mt-1">
+            <p className="text-sm text-[#3F3F3F] font-medium mt-1 text-white">
               Center your face
             </p>
           </div>
           <div className="text-center">
             <Image
-              src={"/images/mobile/icon/04.svg"}
+              src={"/icon/02.png"}
               alt="logo"
               width={26}
               height={21}
               className="mx-auto h-6"
             />
-            <p className="text-sm text-[#3F3F3F] font-medium mt-1">
+            <p className="text-sm text-[#3F3F3F] font-medium mt-1 text-white">
               Even lighting
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-5 max-w-[290px] mx-auto mt-12 mb-14">
+        <div className="grid grid-cols-2 gap-5 max-w-[290px] mx-auto mt-12 mb-14 text-white">
           <div className="text-center">
             <Image
               src={"/images/01.png"}
@@ -117,10 +124,7 @@ export default function SelfiePolicyPage() {
             />
           </div>
         </div>
-          <label className="flex items-center gap-2 mb-3 text-xs text-[#323232] font-medium max-w-[230px] mx-auto">
-            <input type="checkbox" />I agree to the user agreement
-          </label>
-          <label className="flex items-center gap-2 text-xs text-[#323232] font-medium max-w-[230px] mx-auto">
+          <label className="flex items-center gap-2 text-xs  font-medium max-w-[230px] mx-auto text-white">
             <input type="checkbox" />I agree to the privacy policy
           </label>
           <div className="text-center  mt-12 max-auto">

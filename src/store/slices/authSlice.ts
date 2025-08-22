@@ -4,7 +4,7 @@ interface RegistrationData {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  password?: string; // Make password optional
   photo?: string;
   customerId?: string;
   enrollmentId?: string;
@@ -40,7 +40,6 @@ const authSlice = createSlice({
           firstName: '',
           lastName: '',
           email: '',
-          password: '',
           photo: action.payload,
         };
       }
@@ -68,6 +67,19 @@ const authSlice = createSlice({
         state.registrationData.enrollmentStatus = action.payload;
       }
     },
+    updateUserDataFromJWT: (state, action: PayloadAction<Omit<RegistrationData, 'password'>>) => {
+      if (state.registrationData) {
+        // Update existing data without password
+        Object.assign(state.registrationData, action.payload);
+      } else {
+        // Create new data without password
+        state.registrationData = {
+          ...action.payload,
+          password: undefined
+        };
+      }
+      state.isRegistered = true;
+    },
     clearRegistrationData: (state) => {
       state.registrationData = null;
       state.isRegistered = false;
@@ -75,5 +87,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setRegistrationData, setPhoto, setUploadedPhotoUrl, setBiometricEnrollmentData, updateEnrollmentStatus, clearRegistrationData } = authSlice.actions;
+export const { setRegistrationData, setPhoto, setUploadedPhotoUrl, setBiometricEnrollmentData, updateEnrollmentStatus, updateUserDataFromJWT, clearRegistrationData } = authSlice.actions;
 export default authSlice.reducer;

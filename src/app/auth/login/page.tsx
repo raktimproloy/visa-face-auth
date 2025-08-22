@@ -13,6 +13,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,13 +57,16 @@ export default function LoginPage() {
           photo: result.user.photoUrl
         }));
 
-        // Redirect based on enrollment status
-        if (result.user.enrollmentStatus === 'pending') {
+        // Redirect based on enrollment or biometric status
+        if (result.user.enrollmentStatus === 'pending' && result.user.biometricStatus !== 'completed') {
           console.log('User enrollment pending, redirecting to selfie-policy');
           router.push('/auth/selfie-policy');
-        } else {
-          console.log('User enrollment completed, redirecting to final');
+        } else if (result.user.enrollmentStatus === 'completed' || result.user.biometricStatus === 'completed') {
+          console.log('User enrollment or biometric completed, redirecting to final');
           router.push('/auth/final');
+        } else {
+          console.log('User status unclear, redirecting to selfie-policy');
+          router.push('/auth/selfie-policy');
         }
       } else {
         setError(result.error || 'Login failed');
@@ -76,105 +80,94 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-6 flex justify-between items-center flex-col">
-        <form onSubmit={handleLogin} className="grid grid-cols-2 gap-x-4 max-w-[360px]">
-          {/* First name */}
-          <div className="col-span-2 mb-14">
-            <Image
-              src={"/icon-logo.svg"}
-              alt="logo"
-              height={107}
-              width={136}
-              quality={100}
-              className="mx-auto"
-            />
-          </div>
-          <div className="col-span-2 mb-7">
-            <label htmlFor="email" className="block text-base font-normal mb-2">
-              Email
-            </label>
+    <div className="relative !bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-6 bg-dark-overlay">
+    <Image
+      src={"/images/mobile/bg-1.png"}
+      alt="logo"
+      quality={100}
+      fill={true}
+      className="mx-auto lg:object-contain object-cover absolute top-0 left-0 blur-xs"
+    />
+    <div className="flex justify-end items-center flex-col relative z-10 px-4">
+      <form onSubmit={handleLogin} className=" grid grid-cols-1 gap-x-4 max-w-[360px] px-4">
+        {/* Header */}
+        <div className="col-span-1 mb-14">
+          <h3 className="text-2xl font-bold text-white">Login</h3>
+          <p className="text-gray-400">Login to your VisaFace account and start entering event effortlessly.</p>
+        </div>
+        
+        {/* Email */}
+        <div className="col-span-1 mb-7">
+          <input
+            type="email"
+            className="form-control-glass"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        
+        {/* Password */}
+        <div className="col-span-1 mb-8">
+          <div className="password-input-wrapper">
             <input
-              type="email"
-              className="form-control"
-              id="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="col-span-2 mb-8">
-            <label
-              htmlFor="password"
-              className="block text-base font-normal mb-2"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              className="form-control"
+              type={showPassword ? "text" : "password"}
+              className="form-control-glass pr-12"
               id="password"
               name="password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-
-            
-            <Link
-              href={"/auth/register"}
-              className="!block text-left mt-5"
-            >
-              Don't have an account? Register
-            </Link>
-          </div>
-          <div className="col-span-2 mt-6 text-center">
             <button
-              type="submit"
-              disabled={isLoading}
-              className="mobile-btn !text-[#323232] !mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
+              type="button"
+              className="password-toggle-btn"
+              onClick={() => setShowPassword(!showPassword)}
             >
-              {isLoading ? 'Logging in...' : 'Login'}
+              {showPassword ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
             </button>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="col-span-2 mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-center text-sm">
-              {error}
-            </div>
-          )}
-
-
-
-          {/* Test Credentials Info */}
-          <div className="col-span-2 mt-4 text-center text-xs text-[#9C9AA5]">
-            <p>Login with your registered email and password</p>
-            <p className="mt-1">
-              <strong>Note:</strong><br />
-              • Pending enrollment → Redirected to selfie-policy<br />
-              • Completed enrollment → Redirected to final page
-            </p>
-          </div>
-
-          {/* Register Link */}
-          <div className="col-span-2 mt-4 text-center">
-            <p className="text-md text-[#9C9AA5]">
-              Don't have an account? <Link href="/auth/register" className="text-blue-500">Register</Link>
-            </p>
-          </div>
-
-        </form>
+            
+          
+        </div>
         
-          {/* Terms */}
-          <div className="col-span-2 mt-14 text-center">
-            <p className="text-[10px] text-[#9C9AA5]">
-              By signing up to create an account I accept Company’s <br />
-              <strong className="font-bold italic text-[#26203B]">
-                Terms of use & Privacy Policy.
-              </strong>
-            </p>
-      </div>
+        {/* Submit button */}
+        <div className="col-span-1 mt-6 text-center">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="mobile-btn !text-[#323232] !mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? 'Logging in...' : 'Login'}
+          </button>
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="col-span-1 mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-center text-sm">
+            {error}
+          </div>
+        )}
+      </form>
+          <p className="text-md text-[#9C9AA5] mt-4">
+                         Don&apos;t have an account? <Link href="/auth/register" className="text-blue-500">Register</Link>
+          </p>
+    </div>
     </div>
   );
 }
