@@ -283,7 +283,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Submit button */}
-          <div className="col-span-1 mt-8 text-center">
+          <div className="col-span-1 mt-2 text-center">
             <button
               onClick={(e) => {
                 console.log('Button clicked!', e);
@@ -292,7 +292,7 @@ export default function RegisterPage() {
                 handleCreateAccount();
               }}
               onTouchStart={() => {}} // Ensure touch events work
-              className={`mobile-btn !text-[#323232] !mx-auto !relative !z-20 !touch-manipulation ${
+              className={`mobile-btn !text-white !mx-auto !relative !z-20 !touch-manipulation ${
                 isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               type="button"

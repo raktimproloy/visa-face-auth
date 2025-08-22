@@ -148,7 +148,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="mobile-btn !text-[#323232] !mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mobile-btn !text-white !mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
