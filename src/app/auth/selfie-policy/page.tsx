@@ -146,8 +146,9 @@ export default function SelfiePolicyPage() {
                 type="checkbox" 
                 checked={acceptPrivacyPolicy}
                 onChange={(e) => handlePrivacyPolicyChange(e.target.checked)}
-                className=""
+                className={`privacy-checkbox ${privacyPolicyError ? '!border-red-500 !ring-2 !ring-red-500 !ring-opacity-50' : ''}`}
               />
+              
               I agree to the privacy policy
             </label>
             {privacyPolicyError && (
@@ -160,7 +161,6 @@ export default function SelfiePolicyPage() {
               className={`mobile-btn !text-white mb-5 ${
                 !acceptPrivacyPolicy ? 'opacity-70 cursor-not-allowed' : ''
               }`}
-              disabled={!acceptPrivacyPolicy}
             >
               Take A Selfie
             </button>

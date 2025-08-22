@@ -202,13 +202,8 @@ export default function SelfieReviewPage() {
             console.error('Error updating JWT token for retry:', jwtError);
           }
           
-          // Show rejection message and redirect back to selfie page
+          // Show rejection message without redirecting
           setUploadError(`Enrollment not approved. Try again with a better photo.`);
-          
-          // Redirect after showing error message
-          setTimeout(() => {
-            router.push('/auth/selfie');
-          }, 3000);
         }
       
           } catch (error) {
@@ -295,22 +290,25 @@ export default function SelfieReviewPage() {
             </div>
           )}
           
-          <button
-            onClick={handleUpload}
-            disabled={isUploading}
-            className={`mobile-btn !text-[#28A300] !mb-3 !block max-w-[313px] !mx-auto ${
-              isUploading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            {isUploading ? (
-              <div className="flex items-center justify-center gap-2">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#28A300]"></div>
-                Verifying Face...
-              </div>
-            ) : (
-              'Upload'
-            )}
-          </button>
+          {/* Only show Upload button if there's no error */}
+          {!uploadError && (
+            <button
+              onClick={handleUpload}
+              disabled={isUploading}
+              className={`mobile-btn !text-[#28A300] !mb-3 !block max-w-[313px] !mx-auto ${
+                isUploading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              {isUploading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#28A300]"></div>
+                  Verifying Face...
+                </div>
+              ) : (
+                'Upload'
+              )}
+            </button>
+          )}
           
           <button
             onClick={handleRetake}

@@ -107,6 +107,16 @@ body {
   margin-bottom: 20px;
 }
 
+.privacy-checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: #465FF1;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
 .terms-checkbox input[type="checkbox"] {
   width: 20px;
   height: 20px;
