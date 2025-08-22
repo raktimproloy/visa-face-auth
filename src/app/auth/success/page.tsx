@@ -49,10 +49,10 @@ export default function SuccessPage() {
 
         {/* Success Title */}
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
-          Registration Successful!
+          Enrollment Successful!
         </h1>
         <p className="text-gray-600 mb-8">
-          Welcome to Face Visa! Your account has been created successfully.
+          Congratulations! Your face verification has been completed and approved.
         </p>
 
         {/* User Photo */}
@@ -135,8 +135,8 @@ export default function SuccessPage() {
 
         {/* Additional Info */}
         <div className="mt-6 text-sm text-gray-500">
-          <p>Your photo has been uploaded to our secure servers.</p>
-          <p className="mt-1">You can now log in and access your account.</p>
+          <p>Your biometric enrollment has been successfully processed.</p>
+          <p className="mt-1">You can now access all services with your verified identity.</p>
         </div>
       </div>
     </div>

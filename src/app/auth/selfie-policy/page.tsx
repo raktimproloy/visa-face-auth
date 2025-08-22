@@ -2,10 +2,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
+import { useAppSelector } from "../../../store/hooks";
 
 export default function SelfiePolicyPage() {
   // Auth protection - redirect to register if no user data
   const { isAuthenticated } = useAuthProtection();
+  const { registrationData } = useAppSelector((state) => state.auth);
 
   // Show loading state while checking auth
   if (!isAuthenticated) {
@@ -14,7 +16,20 @@ export default function SelfiePolicyPage() {
         <div className="w-full text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
           <p className="text-sm text-[#3F3F3F] font-medium">
-            Checking Registration...
+            Checking Authentication...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Validate enrollment status
+  if (registrationData?.enrollmentStatus !== 'pending') {
+    return (
+      <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
+        <div className="w-full text-center">
+          <p className="text-sm text-[#3F3F3F] font-medium">
+            Invalid enrollment status. Please register again.
           </p>
         </div>
       </div>

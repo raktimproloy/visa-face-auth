@@ -10,6 +10,7 @@ interface RegistrationData {
   enrollmentId?: string;
   biometricStatus?: string;
   idmissionValid?: boolean;
+  enrollmentStatus?: string;
 }
 
 interface AuthState {
@@ -62,6 +63,11 @@ const authSlice = createSlice({
         state.registrationData.idmissionValid = action.payload.idmissionValid;
       }
     },
+    updateEnrollmentStatus: (state, action: PayloadAction<string>) => {
+      if (state.registrationData) {
+        state.registrationData.enrollmentStatus = action.payload;
+      }
+    },
     clearRegistrationData: (state) => {
       state.registrationData = null;
       state.isRegistered = false;
@@ -69,5 +75,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setRegistrationData, setPhoto, setUploadedPhotoUrl, setBiometricEnrollmentData, clearRegistrationData } = authSlice.actions;
+export const { setRegistrationData, setPhoto, setUploadedPhotoUrl, setBiometricEnrollmentData, updateEnrollmentStatus, clearRegistrationData } = authSlice.actions;
 export default authSlice.reducer;

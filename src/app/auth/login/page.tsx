@@ -3,36 +3,69 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginUser, LoginResponse } from "../../../utils/auth";
+import { useAppDispatch } from "../../../store/hooks";
+import { setRegistrationData } from "../../../store/slices/authSlice";
 
 export default function LoginPage() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<LoginResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-    setResult(null);
 
     try {
-      const response = await loginUser({ email, password });
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.error || 'Login failed');
+        return;
+      }
+
+      const result = await response.json();
       
-      if (response.success) {
-        setResult(response);
-        console.log('Login successful:', response);
+      if (result.success) {
+        console.log('Login successful:', result.user);
         
-        // Redirect to final page after successful login
-        setTimeout(() => {
+        // Store user data in Redux
+        dispatch(setRegistrationData({
+          firstName: result.user.firstName,
+          lastName: result.user.lastName,
+          email: result.user.email,
+          password: '', // Don't store password in Redux
+          customerId: result.user.customerId,
+          enrollmentId: result.user.enrollmentId,
+          enrollmentStatus: result.user.enrollmentStatus,
+          biometricStatus: result.user.biometricStatus,
+          idmissionValid: result.user.idmissionValid,
+          photo: result.user.photoUrl
+        }));
+
+        // Redirect based on enrollment status
+        if (result.user.enrollmentStatus === 'pending') {
+          console.log('User enrollment pending, redirecting to selfie-policy');
+          router.push('/auth/selfie-policy');
+        } else {
+          console.log('User enrollment completed, redirecting to final');
           router.push('/auth/final');
-        }, 2000); // 2 second delay to show success message
+        }
       } else {
-        setError(response.error || 'Login failed');
-        console.error('Login failed:', response);
+        setError(result.error || 'Login failed');
       }
     } catch (err) {
       setError('An error occurred during login');
@@ -89,10 +122,10 @@ export default function LoginPage() {
 
             
             <Link
-              href={"/auth/selfie-policy"}
+              href={"/auth/register"}
               className="!block text-left mt-5"
             >
-              Forgot Password?
+              Don't have an account? Register
             </Link>
           </div>
           <div className="col-span-2 mt-6 text-center">
@@ -112,21 +145,22 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Success Message */}
-          {result && (
-            <div className="col-span-2 mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded text-center">
-              <h3 className="font-semibold mb-2">Login Successful!</h3>
-              <p className="text-sm mb-2">Redirecting to your dashboard in 2 seconds...</p>
-            </div>
-          )}
+
 
           {/* Test Credentials Info */}
           <div className="col-span-2 mt-4 text-center text-xs text-[#9C9AA5]">
-            <p>Test with a user created from the selfie upload process</p>
+            <p>Login with your registered email and password</p>
             <p className="mt-1">
-              <strong>Default test data:</strong><br />
-              Email: john.doe@example.com<br />
-              Password: password123
+              <strong>Note:</strong><br />
+              • Pending enrollment → Redirected to selfie-policy<br />
+              • Completed enrollment → Redirected to final page
+            </p>
+          </div>
+
+          {/* Register Link */}
+          <div className="col-span-2 mt-4 text-center">
+            <p className="text-md text-[#9C9AA5]">
+              Don't have an account? <Link href="/auth/register" className="text-blue-500">Register</Link>
             </p>
           </div>
 

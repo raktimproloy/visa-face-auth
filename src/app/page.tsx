@@ -14,7 +14,7 @@ export default function Home() {
         <h3 className="md:text-xl text-base text-white font-bold">Effortless Access. Every Time.</h3>
         <p className="md:text-base text-sm text-white mt-2">Experience a new, secure <br /> and seamless way to enter.</p>
         <Link className="mobile-btn !mt-10" href={'/auth/register'}>Get Started</Link>
-        <p className="md:text-base text-xs text-[#CCCAD2] font-normal text-center mt-3">Already have an account?<Link href={'/auth/login'}>Log in</Link></p>
+        {/* <p className="md:text-base text-xs text-[#CCCAD2] font-normal text-center mt-3">Already have an account?<Link href={'/auth/login'}>Log in</Link></p> */}
       </div>
     </div>
     </div>

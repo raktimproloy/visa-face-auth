@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAppDispatch } from "../../../store/hooks";
 import { setRegistrationData } from "../../../store/slices/authSlice";
 import { useRouter } from "next/navigation";
-import { checkEmailExists, validateEmail } from "../../../utils/emailValidation";
+import { validateEmail } from "../../../utils/emailValidation";
 import Link from "next/link";
 export default function RegisterPage() {
   const [password, setPassword] = useState("");
@@ -48,26 +48,60 @@ export default function RegisterPage() {
     setIsSubmitting(true);
     
     try {
-      // Check if email already exists in DynamoDB
-      const emailCheck = await checkEmailExists(email);
-      if (emailCheck.exists) {
-        setEmailError("This email is already registered. Please use a different email.");
+      // Register user directly with the new API
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (response.status === 409) {
+          setEmailError("This email is already registered. Please use a different email.");
+        } else {
+          setEmailError(errorData.error || "Registration failed. Please try again.");
+        }
         setIsSubmitting(false);
         return;
       }
 
-      // Email is available, proceed with registration
-      dispatch(setRegistrationData({
-        firstName,
-        lastName,
-        email,
-        password
-      }));
+      const result = await response.json();
       
-      router.push("/auth/selfie-policy");
+      if (result.success) {
+        console.log('Registration successful, storing user data in Redux:', result.user);
+        
+        // Store user data in Redux for the flow
+        dispatch(setRegistrationData({
+          firstName,
+          lastName,
+          email,
+          password,
+          customerId: result.user.customerId,
+          enrollmentId: result.user.enrollmentId,
+          enrollmentStatus: result.user.enrollmentStatus,
+          biometricStatus: result.user.biometricStatus,
+          idmissionValid: result.user.idmissionValid
+        }));
+        
+        console.log('Redux data stored, redirecting to selfie-policy page');
+        
+        // Redirect to selfie policy page
+        router.push("/auth/selfie-policy");
+      } else {
+        setEmailError("Registration failed. Please try again.");
+        setIsSubmitting(false);
+      }
     } catch (error) {
       console.error("Registration error:", error);
-      setEmailError("Unable to verify email. Please try again.");
+      setEmailError("Unable to complete registration. Please try again.");
       setIsSubmitting(false);
     }
   };
