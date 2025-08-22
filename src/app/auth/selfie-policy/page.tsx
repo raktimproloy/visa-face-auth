@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
+import { useState } from "react";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
 import { useAppSelector } from "../../../store/hooks";
 
@@ -8,6 +8,10 @@ export default function SelfiePolicyPage() {
   // Auth protection - redirect to register if no user data
   const { isAuthenticated } = useAuthProtection();
   const { registrationData } = useAppSelector((state) => state.auth);
+  
+  // State for privacy policy checkbox
+  const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
+  const [privacyPolicyError, setPrivacyPolicyError] = useState("");
 
   // Show loading state while checking auth
   if (!isAuthenticated) {
@@ -29,6 +33,24 @@ export default function SelfiePolicyPage() {
     window.location.href = '/auth/final';
     return null;
   }
+
+  // Handle privacy policy checkbox change
+  const handlePrivacyPolicyChange = (checked: boolean) => {
+    setAcceptPrivacyPolicy(checked);
+    if (checked) {
+      setPrivacyPolicyError(""); // Clear error when checkbox is checked
+    }
+  };
+
+  // Handle take selfie button click
+  const handleTakeSelfie = () => {
+    if (!acceptPrivacyPolicy) {
+      setPrivacyPolicyError("Please accept the privacy policy to continue");
+      return;
+    }
+    // If checkbox is checked, navigate to selfie page
+    window.location.href = '/auth/selfie';
+  };
 
   return (
     <div className="relative !bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
@@ -118,17 +140,30 @@ export default function SelfiePolicyPage() {
             />
           </div>
         </div>
-          <label className="flex items-center gap-2 text-xs  font-medium max-w-[230px] mx-auto text-white">
-            <input type="checkbox" />I agree to the privacy policy
-          </label>
-          <div className="text-center  mt-4 max-auto">
-            
-          <Link
-            href={"/auth/selfie"}
-            className="mobile-btn !text-[#323232] mb-5"
-          >
-            Take A Selfie
-          </Link>
+          <div className="flex flex-col items-center gap-2 max-w-[230px] mx-auto">
+            <label className="flex items-center justify-center gap-2 text-xs font-medium text-white">
+              <input 
+                type="checkbox" 
+                checked={acceptPrivacyPolicy}
+                onChange={(e) => handlePrivacyPolicyChange(e.target.checked)}
+                className=""
+              />
+              I agree to the privacy policy
+            </label>
+            {privacyPolicyError && (
+              <p className="text-red-400 text-xs text-center">{privacyPolicyError}</p>
+            )}
+          </div>
+          <div className="text-center mt-4 max-auto">
+            <button
+              onClick={handleTakeSelfie}
+              className={`mobile-btn !text-white mb-5 ${
+                !acceptPrivacyPolicy ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
+              disabled={!acceptPrivacyPolicy}
+            >
+              Take A Selfie
+            </button>
           </div>
       </div>
       

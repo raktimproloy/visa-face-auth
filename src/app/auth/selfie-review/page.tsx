@@ -268,15 +268,16 @@ export default function SelfieReviewPage() {
         </button>
         
         {/* Display captured photo */}
-        <div className="flex justify-center mb-8">
-          <Image
-            src={registrationData.photo}
-            alt="Captured selfie"
-            width={424}
-            height={500}
-            className="max-h-[500px] max-w-full rounded-lg shadow-lg"
-            style={{ maxWidth: '424px' }}
-          />
+        <div className="flex justify-center mb-8 px-4">
+          <div className="relative w-full max-w-[340px] aspect-[4/5] bg-gray-100 rounded-lg shadow-lg overflow-hidden">
+            <Image
+              src={registrationData.photo}
+              alt="Captured selfie"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 340px, 340px"
+            />
+          </div>
         </div>
 
         <div className="text-center mt-12 max-auto">
