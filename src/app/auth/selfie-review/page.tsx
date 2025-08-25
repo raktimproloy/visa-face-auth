@@ -292,7 +292,7 @@ export default function SelfieReviewPage() {
         
         {/* Success Message */}
         {successMessage && (
-          <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg mx-4">
+          <div className="mb-4 p-4 mt-4 text-green-700 rounded-lg mx-4">
             <div className="flex items-center gap-2">
               <span className="text-xl">✅</span>
               <span>{successMessage}</span>
@@ -310,7 +310,7 @@ export default function SelfieReviewPage() {
         
         {/* Error Message */}
         {uploadError && (
-          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg mx-4">
+          <div className="mb-4 p-4 mt-4 text-red-700 rounded-lg mx-4">
             <div className="flex items-center gap-2">
               <span className="text-xl">⚠️</span>
               <span>{uploadError}</span>
@@ -318,9 +318,9 @@ export default function SelfieReviewPage() {
           </div>
         )}
         
-        {/* Action Buttons - Only show if not successful */}
-        {!successMessage && (
-          <div className="text-center mt-12 max-auto">
+        {/* Action Buttons - Show Verify Face only if no error, show Re-Take always */}
+        <div className="text-center mt-12 max-auto">
+          {!uploadError && !successMessage && (
             <button
               onClick={handleUpload}
               disabled={isUploading}
@@ -335,18 +335,18 @@ export default function SelfieReviewPage() {
                 'Verify Face'
               )}
             </button>
-            
-            <button
-              onClick={handleRetake}
-              disabled={isUploading}
-              className={`mobile-btn !text-[#B20610] mb-3 !block max-w-[208px] !min-w-[208px] !px-4 !py-3 !mx-auto ${
-                isUploading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-            >
-              Re-Take Photo
-            </button>
-          </div>
-        )}
+          )}
+          
+          <button
+            onClick={handleRetake}
+            disabled={isUploading}
+            className={`mobile-btn !text-[#B20610] mb-3 !block max-w-[208px] !min-w-[208px] !px-4 !py-3 !mx-auto ${
+              isUploading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            Re-Take Photo
+          </button>
+        </div>
       </div>
     </div>
   );
