@@ -115,12 +115,6 @@ export default function SelfiePage() {
           </p>
           <div className="space-y-3">
             <button
-              onClick={() => router.push('/auth/final')}
-              className="mobile-btn !text-[#28A300] !mx-auto !block"
-            >
-              Continue to Final Step
-            </button>
-            <button
               onClick={() => {
                 // Reset biometric status to allow retake
                 dispatch(setBiometricEnrollmentData({

@@ -36,7 +36,7 @@ export default function SuccessPage() {
 
   // Get user data with fallbacks
   const userData = {
-    name: `${registrationData?.firstName || ''} ${registrationData?.lastName || ''}`.trim() || 'User',
+    name: `${registrationData?.firstName || ''} ${registrationData?.lastName || ''}`.trim() || '',
     customerId: registrationData?.customerId || 'N/A',
     enrollmentId: registrationData?.enrollmentId || 'N/A',
     biometricStatus: registrationData?.biometricStatus || 'pending',
@@ -45,24 +45,6 @@ export default function SuccessPage() {
   };
 
   return (
-    // <div className="bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-25">
-    // <div className="flex justify-center items-center flex-col text-center">
-    //   <div className='relative'>
-    //     <Image src={'/logo.svg'} alt="logo" height={115} width={300} quality={100} />
-    //     <Image src={'/images/mobile/01.svg'} alt="logo" height={350} width={300} quality={100} className='absolute top-0 left-0' />
-    //     <div className='py-28 text-center'>
-    //       <h5 className='text-white text-md  font-bold mb-8'>Hello {userData.name},</h5>
-    //       <p className='text-white text-sm font-medium mb-8'>Your face has been successfully <br/> enrolled.</p>
-    //       <p className='text-white text-sm font-medium'>From now on, just smile at <br/> any of our Verifier screens and <br/> you&apos;ll breeze right in.</p>
-    //     </div>
-    //   </div>
-    //   <div className="mt-1">
-    //     <Link className="mobile-btn !mt-10" href={'/auth/final'}>I&apos;m all set</Link>
-    //     <p className='text-white text-sm font-medium mt-3'>How to Troubleshoot </p>
-    //     <p className='text-white text-sm font-medium mt-3'>If you ever have trouble, email <Link href='mailto:support@visaface.online' className=''>support@visaface.online</Link></p>
-    //   </div>
-    // </div>
-    // </div>
     <div className="!bg-[url('/images/mobile/bg-four.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
     <div className="w-full text-center">
       <Image
