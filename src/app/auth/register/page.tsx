@@ -28,7 +28,7 @@ export default function RegisterPage() {
   const separateFullName = (fullName: string) => {
     const nameParts = fullName.trim().split(' ');
     if (nameParts.length === 1) {
-      return { firstName: nameParts[0], lastName: 'User' }; // Default last name if only one name provided
+      return { firstName: nameParts[0], lastName: '' }; // Default last name if only one name provided
     } else if (nameParts.length >= 2) {
       const firstName = nameParts[0];
       const lastName = nameParts.slice(1).join(' ');
@@ -92,7 +92,7 @@ export default function RegisterPage() {
     console.log('Name separation result:', { firstName, lastName });
     
     if (!firstName) {
-      setFullNameError("Please enter at least your first name");
+      setFullNameError("Please enter your first name");
       return;
     }
 

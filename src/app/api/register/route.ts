@@ -39,10 +39,10 @@ export async function POST(request: NextRequest) {
     
     const { firstName, lastName, email, password } = await request.json();
 
-    // Validate required fields
-    if (!firstName || !lastName || !email || !password) {
+    // Validate required fields (lastName can be blank)
+    if (!firstName || !email || !password) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: 'First name, email, and password are required' },
         { status: 400 }
       );
     }
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       customerId,
       enrollmentId,
       firstName,
-      lastName,
+      lastName: lastName || '', // Handle blank lastName
       email: email.toLowerCase(),
       password: hashedPassword,
       photoUrl: '', // Blank photo initially
