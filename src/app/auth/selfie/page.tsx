@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setPhoto } from "../../../store/slices/authSlice";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
+import { setBiometricEnrollmentData } from "../../../store/slices/authSlice";
 
 export default function SelfiePage() {
   // Auth protection - redirect to register if no user data
@@ -101,9 +102,44 @@ export default function SelfiePage() {
 
   // Check if user has already completed biometric verification
   if (registrationData?.biometricStatus === 'completed') {
-    // Redirect to final page if biometric is already completed
-    window.location.href = '/auth/final';
-    return null;
+    // Show completion message instead of redirecting
+    return (
+      <div className="!bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-9">
+        <div className="w-full text-center max-w-md mx-4">
+          <div className="text-6xl mb-4">✅</div>
+          <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5">
+            Biometric Verification Completed
+          </button>
+          <p className="text-[#3E3E3E] mb-6">
+            You have already completed your face verification. You can proceed to the final step or take a new photo if needed.
+          </p>
+          <div className="space-y-3">
+            <button
+              onClick={() => router.push('/auth/final')}
+              className="mobile-btn !text-[#28A300] !mx-auto !block"
+            >
+              Continue to Final Step
+            </button>
+            <button
+              onClick={() => {
+                // Reset biometric status to allow retake
+                dispatch(setBiometricEnrollmentData({
+                  customerId: registrationData.customerId || '',
+                  enrollmentId: registrationData.enrollmentId || '',
+                  biometricStatus: 'pending',
+                  idmissionValid: false,
+                }));
+                // Start camera for new photo
+                startCamera();
+              }}
+              className="mobile-btn !text-[#B20610] !mx-auto !block"
+            >
+              Take New Photo
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // Show loading state

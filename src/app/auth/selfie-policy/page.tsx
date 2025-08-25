@@ -30,9 +30,34 @@ export default function SelfiePolicyPage() {
 
   // Check if user has already completed biometric verification
   if (registrationData?.biometricStatus === 'completed') {
-    // Redirect to final page if biometric is already completed
-    window.location.href = '/auth/final';
-    return null;
+    // Show completion message instead of redirecting
+    return (
+      <div className="!bg-[url('/images/mobile/bg-three.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-10">
+        <div className="w-full text-center">
+          <div className="text-6xl mb-4">✅</div>
+          <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5">
+            Biometric Verification Completed
+          </button>
+          <p className="text-[#3E3E3E] mb-6">
+            You have already completed your face verification. You can proceed to the final step or review your current status.
+          </p>
+          <div className="space-y-3">
+            <button
+              onClick={() => window.location.href = '/auth/final'}
+              className="mobile-btn !text-[#28A300] !mx-auto !block"
+            >
+              Continue to Final Step
+            </button>
+            <button
+              onClick={() => window.location.href = '/auth/selfie-review'}
+              className="mobile-btn !text-[#B20610] !mx-auto !block"
+            >
+              Review Status
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // Handle privacy policy checkbox change
