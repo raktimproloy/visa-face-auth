@@ -25,7 +25,7 @@ export default function SelfieReviewPage() {
       // Only redirect if they haven't just completed it
       if (!hasAttemptedUpload) {
         console.log('User already completed biometric, redirecting to final');
-        router.push('/auth/final');
+        router.push('/auth/success');
       }
     }
   }, [registrationData?.biometricStatus, hasAttemptedUpload, router]);
@@ -296,14 +296,6 @@ export default function SelfieReviewPage() {
             <div className="flex items-center gap-2">
               <span className="text-xl">✅</span>
               <span>{successMessage}</span>
-            </div>
-            <div className="mt-3 text-center">
-              <button
-                onClick={() => router.push('/auth/final')}
-                className="mobile-btn !text-[#28A300] !mx-auto"
-              >
-                Continue to Final Step
-              </button>
             </div>
           </div>
         )}
