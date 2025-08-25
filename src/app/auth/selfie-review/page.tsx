@@ -168,8 +168,13 @@ export default function SelfieReviewPage() {
           console.error('Error updating JWT token:', jwtError);
         }
         
-        // Show success message and provide option to continue
-        setSuccessMessage('Enrollment successful! Your face verification has been approved. You can now proceed to the final step.');
+        // Show success message and redirect after 2 seconds
+        setSuccessMessage('Enrollment successful! Your face verification has been approved. Redirecting to success page...');
+        
+        // Redirect to success page after 2 seconds
+        setTimeout(() => {
+          router.push('/auth/success');
+        }, 2000);
         
       } else {
         // Enrollment not approved

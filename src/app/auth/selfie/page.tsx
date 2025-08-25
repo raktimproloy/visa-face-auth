@@ -230,7 +230,7 @@ export default function SelfiePage() {
 
   // Show camera or start button
   return (
-    <div className="relative h-screen pb-20 flex flex-col justify-between items-center">
+    <div className="relative h-screen w-screen pb-20 flex flex-col justify-between items-center">
       {isCameraActive ? 
       (
         // Camera not active - show original design
