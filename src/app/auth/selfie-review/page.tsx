@@ -333,7 +333,9 @@ export default function SelfieReviewPage() {
               )}
             </button>
           )}
-          
+
+          {
+            successMessage ? "" : 
           <button
             onClick={handleRetake}
             disabled={isUploading}
@@ -343,6 +345,8 @@ export default function SelfieReviewPage() {
           >
             Re-Take Photo
           </button>
+          }
+          
         </div>
       </div>
     </div>

@@ -35,14 +35,20 @@ export const useAuthProtection = () => {
           
           if (isBiometricCompleted) {
             // User has completed biometric verification
-            // Can only access final and success pages
+            // Can access final and success pages, but don't force redirect to final
             if (currentPath === '/auth/final' || currentPath === '/auth/success') {
               console.log('User biometric completed, allowing access to final/success page');
               setIsAuthenticated(true);
               setIsLoading(false);
               return;
+            } else if (currentPath === '/auth/selfie-review') {
+              // Allow access to selfie-review even if biometric is completed (for the redirect flow)
+              console.log('User biometric completed but on selfie-review, allowing access for redirect flow');
+              setIsAuthenticated(true);
+              setIsLoading(false);
+              return;
             } else {
-              // Redirect to final page if trying to access selfie-related pages
+              // Only redirect to final if on other selfie pages
               console.log('User biometric completed, redirecting to final page');
               router.push('/auth/final');
               return;
@@ -103,14 +109,20 @@ export const useAuthProtection = () => {
           
           if (isBiometricCompleted) {
             // User has completed biometric verification
-            // Can only access final and success pages
+            // Can access final and success pages, but don't force redirect to final
             if (currentPath === '/auth/final' || currentPath === '/auth/success') {
               console.log('User biometric completed (JWT check), allowing access to final/success page');
               setIsAuthenticated(true);
               setIsLoading(false);
               return;
+            } else if (currentPath === '/auth/selfie-review') {
+              // Allow access to selfie-review even if biometric is completed (for the redirect flow)
+              console.log('User biometric completed but on selfie-review, allowing access for redirect flow');
+              setIsAuthenticated(true);
+              setIsLoading(false);
+              return;
             } else {
-              // Redirect to final page if trying to access selfie-related pages
+              // Only redirect to final if on other selfie pages
               console.log('User biometric completed (JWT check), redirecting to final page');
               router.push('/auth/final');
               return;
