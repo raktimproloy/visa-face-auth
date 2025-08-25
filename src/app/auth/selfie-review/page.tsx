@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { setUploadedPhotoUrl, setBiometricEnrollmentData, updateEnrollmentStatus } from "../../../store/slices/authSlice";
 import Image from "next/image";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
+import Link from "next/link";
 
 export default function SelfieReviewPage() {
   // Auth protection - redirect to register if no user data
@@ -256,71 +257,54 @@ export default function SelfieReviewPage() {
   }
 
   return (
-    <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-9">
-      <div className="w-full">
-        <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5">
-          Setisfied with your photo?
-        </button>
-        
-        {/* Display captured photo */}
-        <div className="flex justify-center mb-8 px-4">
-          <div className="relative w-full max-w-[340px] aspect-[4/5] bg-gray-100 rounded-lg shadow-lg overflow-hidden">
-            <Image
-              src={registrationData.photo}
-              alt="Captured selfie"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 340px, 340px"
-            />
-          </div>
-        </div>
 
-        <div className="text-center mt-12 max-auto">
-          {/* Success Message Display */}
+    <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-9">
+    <div className="w-full">
+    <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5">Satisfied with your photo?</button>
+          <Image
+            src={registrationData.photo}
+            alt="logo"
+            width={424}
+            height={502}
+            className="mx-auto max-h-[500px]"
+          />
           {successMessage && (
-            <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+            <div className="mb-4 p-3 text-green-700 rounded-lg">
               {successMessage}
             </div>
           )}
-          
-          {/* Upload Error Display */}
-          {uploadError && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+         {uploadError && (
+            <div className="mb-4 p-3 text-red-700 rounded-lg">
               {uploadError}
             </div>
           )}
-          
-          {/* Only show Upload button if there's no error */}
-          {!uploadError && (
-            <button
-              onClick={handleUpload}
-              disabled={isUploading}
-              className={`mobile-btn !text-[#28A300] !mb-3 !block max-w-[313px] !mx-auto ${
-                isUploading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-            >
-              {isUploading ? (
-                <div className="flex items-center justify-center gap-2">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#28A300]"></div>
-                  Verifying Face...
-                </div>
-              ) : (
-                'Upload'
-              )}
-            </button>
+        <div className="text-center  mt-12 max-auto">
+          <button
+            onClick={handleUpload}
+            disabled={isUploading}
+            className="mobile-btn !text-[#28A300] !mb-3 !block max-w-[313px]"
+          >
+          {isUploading ? (
+            <div className="flex items-center justify-center gap-2">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#28A300]"></div>
+              Verifying Face...
+            </div>
+          ) : (
+            'Upload'
           )}
-          
+          </button>
           <button
             onClick={handleRetake}
             disabled={isUploading}
-            className={`mobile-btn !text-[#B20610] mb-3 !block max-w-[208px] !min-w-[208px] !px-4 !py-3 !mx-auto ${
-              isUploading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={`mobile-btn !text-[#B20610] mb-3 !block max-w-[208px] !min-w-[208px] !px-4 !py-3 ${
+                       isUploading ? 'opacity-50 cursor-not-allowed' : ''
+                     }`}
           >
             Re-Take
           </button>
         </div>
-      </div>
     </div>
+    
+  </div>
   );
 }

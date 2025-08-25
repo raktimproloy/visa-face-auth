@@ -53,8 +53,23 @@ export default function RegisterPage() {
     setConfirmPasswordError("");
     setAcceptTermsError("");
     
-    if (!fullName || !email || !password || !confirmPassword) {
-      setEmailError("Please fill in all fields");
+    if (!fullName) {
+      setFullNameError("Please enter your full name");
+      return;
+    }
+    
+    if (!email) {
+      setEmailError("Please enter your email address");
+      return;
+    }
+    
+    if (!password) {
+      setPasswordError("Please enter a password");
+      return;
+    }
+    
+    if (!confirmPassword) {
+      setConfirmPasswordError("Please confirm your password");
       return;
     }
 
@@ -144,30 +159,26 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative !bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-6 bg-dark-overlay">
-    <Image
-      src={"/images/mobile/bg-1.png"}
-      alt="logo"
-      quality={100}
-      fill={true}
-      className="mx-auto lg:object-contain object-cover absolute top-0 left-0 blur-xs"
-    />
-      <div className="flex justify-end items-center flex-col relative z-10 px-4">
-        <form className="grid grid-cols-1 gap-x-4 max-w-[360px] px-4">
-          {/* Header */}
-          <div className="col-span-1 mb-14">
-            <h3 className="text-2xl font-bold text-white">Create Your Account</h3>
-            <p className="text-gray-400">Create your VisaFace account and start entering event effortlessly.</p>
+    <div className="!bg-[url('/images/mobile/bg-two-1.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-6">
+      <div className="flex justify-center items-center flex-col">
+        <form className="grid grid-cols-2 gap-x-4 max-w-[360px]">
+          {/* First name */}
+          <div className="col-span-2 mb-10">
+            <h2 className="text-xl text-white font-bold mb-3">
+              Create Account
+            </h2>
+            <p className="text-sm text-[#CFCFCF]">
+              Create your VisaFace account and <br /> start entering event
+              effortlessly.
+            </p>
           </div>
-          
-          {/* Full Name */}
-          <div className="col-span-1 mb-7">
+          <div className="col-span-2 mb-5">
             <input
               type="text"
-              className={`form-control-glass ${fullNameError ? 'border-red-400' : ''}`}
-              id="full_name"
-              name="full_name"
+              className={`form-control ${fullNameError ? 'border-red-400' : ''}`}
+              id="first_name"
               placeholder="Enter your full name"
+              name="first_name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
@@ -177,13 +188,13 @@ export default function RegisterPage() {
           </div>
 
           {/* Email */}
-          <div className="col-span-1 mb-7">
+          <div className="col-span-2 mb-5">
             <input
               type="email"
-              className={`form-control-glass ${emailError ? 'border-red-400' : ''}`}
+              className={`form-control ${emailError ? 'border-red-400' : ''}`}
+              placeholder="Enter your email"
               id="email"
               name="email"
-              placeholder="Enter your email"
               value={email}
               onChange={(e) => handleEmailChange(e.target.value)}
             />
@@ -191,128 +202,126 @@ export default function RegisterPage() {
               <p className="text-red-400 text-sm mt-1">{emailError}</p>
             )}
           </div>
-
           {/* Password */}
-          <div className="col-span-1 mb-7">
-            <div className="password-input-wrapper">
+          <div className="col-span-2 mb-5">
+            <div className="relative">
+              <span
+                className="right-4 absolute top-3 z-10 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="27"
+                  height="26"
+                  viewBox="0 0 27 26"
+                  fill="none"
+                >
+                  <path
+                    d="M18.3914 17.7776C16.9611 18.8316 15.2193 19.4154 13.421 19.4438C8.99059 19.4438 5.99634 15.7418 4.8004 13.9381C4.40821 13.3466 4.4117 12.5991 4.80243 12.0067C5.77454 10.5328 7.00868 9.23292 8.45063 8.16858M11.6638 6.69637C12.2398 6.56605 12.8295 6.5009 13.421 6.50224C17.8531 6.50224 20.8479 10.2069 22.043 12.0099C22.4344 12.6005 22.4314 13.3464 22.0426 13.9385C21.6724 14.5022 21.2634 15.0417 20.8181 15.5532M15.195 14.6877C14.5692 15.3369 13.6267 15.6041 12.7372 15.3845C11.8478 15.165 11.1533 14.4936 10.9262 13.6339C10.699 12.7741 10.9755 11.8631 11.6471 11.2582M5.59192 5.40527L21.2501 20.5409"
+                    stroke="#F4F8FC"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
               <input
                 type={showPassword ? "text" : "password"}
-                className="form-control-glass pr-12"
+                className={`form-control ${passwordError ? 'border-red-400' : ''}`}
                 id="password"
                 name="password"
-                placeholder="Enter your password"
+                placeholder="Enter your Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-
-              <button
-                type="button"
-                className="password-toggle-btn"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                )}
-              </button>
+              {passwordError && (
+                <p className="text-red-400 text-sm mt-1">{passwordError}</p>
+              )}
             </div>
-            {passwordError && (
-              <p className="text-red-400 text-sm mt-1">{passwordError}</p>
-            )}
           </div>
-
           {/* Confirm Password */}
-          <div className="col-span-1 mb-8">
-            <div className="password-input-wrapper">
+          <div className="col-span-2 mb-5">
+            <div className="relative">
+              <span
+                className="right-4 absolute top-3 z-10 cursor-pointer"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="27"
+                  height="26"
+                  viewBox="0 0 27 26"
+                  fill="none"
+                >
+                  <path
+                    d="M18.3914 17.7776C16.9611 18.8316 15.2193 19.4154 13.421 19.4438C8.99059 19.4438 5.99634 15.7418 4.8004 13.9381C4.40821 13.3466 4.4117 12.5991 4.80243 12.0067C5.77454 10.5328 7.00868 9.23292 8.45063 8.16858M11.6638 6.69637C12.2398 6.56605 12.8295 6.5009 13.421 6.50224C17.8531 6.50224 20.8479 10.2069 22.043 12.0099C22.4344 12.6005 22.4314 13.3464 22.0426 13.9385C21.6724 14.5022 21.2634 15.0417 20.8181 15.5532M15.195 14.6877C14.5692 15.3369 13.6267 15.6041 12.7372 15.3845C11.8478 15.165 11.1533 14.4936 10.9262 13.6339C10.699 12.7741 10.9755 11.8631 11.6471 11.2582M5.59192 5.40527L21.2501 20.5409"
+                    stroke="#F4F8FC"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                className="form-control-glass pr-12"
+                className={`form-control ${confirmPasswordError ? 'border-red-400' : ''}`}
                 id="confirm_password"
                 name="confirm_password"
-                placeholder="Confirm your password"
+                placeholder="Re-type password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              <button
-                type="button"
-                className="password-toggle-btn"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                )}
-              </button>
+              {confirmPasswordError && (
+                <p className="text-red-400 text-sm mt-1">{confirmPasswordError}</p>
+              )}
             </div>
-            {confirmPasswordError && (
-              <p className="text-red-400 text-sm mt-1">{confirmPasswordError}</p>
-            )}
           </div>
 
-          {/* Terms Checkbox */}
-          <div className="col-span-1 mb-3 flex justify-center flex-col items-center">
-            <div className="terms-checkbox">
-              <input
-                type="checkbox"
-                className={`${acceptTermsError ? 'border-red-400' : ''}`}
-                id="accept_terms"
-                checked={acceptTerms}
-                onChange={(e) => setAcceptTerms(e.target.checked)}
+          <div className="col-span-2 text-center">
+            <label className="flex items-center justify-center gap-3 text-white text-xs">
+              <input 
+              type="checkbox"
+              className={`${acceptTermsError ? 'border-red-400' : ''}`}
+              id="accept_terms"
+              checked={acceptTerms}
+              onChange={(e) => setAcceptTerms(e.target.checked)}
               />
-              <label htmlFor="accept_terms">
-                Accept the <strong className="text-blue-400">Terms and Service</strong>
-              </label>
-            </div>
+              Accept term of service
+            </label>
             {acceptTermsError && (
               <p className="text-red-400 text-sm mt-1">{acceptTermsError}</p>
             )}
           </div>
-
-          {/* Submit button */}
-          <div className="col-span-1 mt-2 text-center">
+          <div className="col-span-2 mt-12 text-center">
             <button
               onClick={(e) => {
-                console.log('Button clicked!', e);
-                console.log('Form state:', { fullName, email, password, confirmPassword, acceptTerms });
                 e.preventDefault();
+                console.log('Sign Up button clicked!');
+                console.log('Form state:', { 
+                  fullName, 
+                  email, 
+                  password: password ? '***' : 'empty', 
+                  confirmPassword: confirmPassword ? '***' : 'empty', 
+                  acceptTerms 
+                });
+                console.log('Validation errors:', { fullNameError, emailError, passwordError, confirmPasswordError, acceptTermsError });
                 handleCreateAccount();
               }}
-              onTouchStart={() => {}} // Ensure touch events work
-              className={`mobile-btn !text-white !mx-auto !relative !z-20 !touch-manipulation ${
-                isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
               type="button"
               disabled={isSubmitting}
-              style={{
-                WebkitTapHighlightColor: 'transparent',
-                WebkitTouchCallout: 'none',
-                WebkitUserSelect: 'none',
-                userSelect: 'none'
-              }}
+              className="mobile-btn !text-white !mx-auto cursor-pointer"
+              style={{ pointerEvents: isSubmitting ? 'none' : 'auto' }}
             >
-              {isSubmitting ? 'Creating Account...' : 'Create Account'}
+              {isSubmitting ? 'Creating Account...' : 'Sign Up'}
             </button>
-            
           </div>
-          
-          {/* Sign in link */}
-          <div className="col-span-1 mt-4 text-center">
-            <p className="text-md text-[#9C9AA5]">
-              Have an account? <Link href="/auth/login" className="text-blue-500">Sign in</Link>
+          <div className="col-span-2 mt-5 text-center">
+            <p className="text-xs text-[#A8AFC0]">
+              Have an account?{" "}
+              <Link
+                className="text-sm text-[#D3D3D3] font-bold"
+                href={"/auth/login"}
+              >
+                Sign In
+              </Link>
             </p>
           </div>
         </form>

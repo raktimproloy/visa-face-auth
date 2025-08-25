@@ -45,125 +45,54 @@ export default function SuccessPage() {
   };
 
   return (
-    // <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 flex items-center justify-center p-4">
-    //   <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
-    //     {/* Success Icon */}
-    //     <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
-    //       <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    //         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-    //       </svg>
-    //     </div>
-
-    //     {/* Success Title */}
-    //     <h1 className="text-3xl font-bold text-gray-800 mb-2">
-    //       Enrollment Successful!
-    //     </h1>
-    //     <p className="text-gray-600 mb-8">
-    //       Congratulations! Your face verification has been completed and approved.
-    //     </p>
-
-    //     {/* User Photo */}
-    //     {userData.photoUrl && (
-    //       <div className="mb-6">
-    //         <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 border-purple-200 shadow-lg">
-    //           <Image
-    //             src={userData.photoUrl}
-    //             alt="User Photo"
-    //             width={96}
-    //             height={96}
-    //             className="w-full h-full object-cover"
-    //           />
-    //         </div>
-    //       </div>
-    //     )}
-
-    //     {/* User Information */}
-    //     <div className="bg-gray-50 rounded-xl p-6 mb-8 text-left">
-    //       <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">
-    //         Account Details
-    //       </h3>
-          
-    //       <div className="space-y-3">
-    //         <div className="flex justify-between">
-    //           <span className="text-gray-600 font-medium">Name:</span>
-    //           <span className="text-gray-800 font-semibold">{userData.name}</span>
-    //         </div>
-            
-    //         <div className="flex justify-between">
-    //           <span className="text-gray-600 font-medium">Customer ID:</span>
-    //           <span className="text-gray-800 font-mono text-sm">{userData.customerId}</span>
-    //         </div>
-            
-    //         <div className="flex justify-between">
-    //           <span className="text-gray-600 font-medium">Enrollment ID:</span>
-    //           <span className="text-gray-800 font-mono text-sm">{userData.enrollmentId}</span>
-    //         </div>
-            
-    //         <div className="flex justify-between">
-    //           <span className="text-gray-600 font-medium">Status:</span>
-    //           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-    //             userData.biometricStatus === 'pending' 
-    //               ? 'bg-yellow-100 text-yellow-800' 
-    //               : 'bg-green-100 text-green-800'
-    //           }`}>
-    //             {userData.biometricStatus}
-    //           </span>
-    //         </div>
-            
-    //         <div className="flex justify-between">
-    //           <span className="text-gray-600 font-medium">IDMission Valid:</span>
-    //           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-    //             userData.idmissionValid 
-    //               ? 'bg-green-100 text-green-800' 
-    //               : 'bg-red-100 text-red-800'
-    //           }`}>
-    //             {userData.idmissionValid ? 'Yes' : 'No'}
-    //           </span>
-    //         </div>
-    //       </div>
-    //     </div>
-
-    //     {/* Action Buttons */}
-    //     <div className="space-y-4">
-    //       <Link 
-    //         href="/auth/login-test"
-    //         className="w-full bg-purple-600 text-white py-3 px-6 rounded-xl hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
-    //       >
-    //         Login to Your Account
-    //       </Link>
-          
-    //       <Link 
-    //         href="/"
-    //         className="w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-xl hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 font-medium"
-    //       >
-    //         Back to Home
-    //       </Link>
-    //     </div>
-
-    //     {/* Additional Info */}
-    //     <div className="mt-6 text-sm text-gray-500">
-    //       <p>Your biometric enrollment has been successfully processed.</p>
-    //       <p className="mt-1">You can now access all services with your verified identity.</p>
+    // <div className="bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-25">
+    // <div className="flex justify-center items-center flex-col text-center">
+    //   <div className='relative'>
+    //     <Image src={'/logo.svg'} alt="logo" height={115} width={300} quality={100} />
+    //     <Image src={'/images/mobile/01.svg'} alt="logo" height={350} width={300} quality={100} className='absolute top-0 left-0' />
+    //     <div className='py-28 text-center'>
+    //       <h5 className='text-white text-md  font-bold mb-8'>Hello {userData.name},</h5>
+    //       <p className='text-white text-sm font-medium mb-8'>Your face has been successfully <br/> enrolled.</p>
+    //       <p className='text-white text-sm font-medium'>From now on, just smile at <br/> any of our Verifier screens and <br/> you&apos;ll breeze right in.</p>
     //     </div>
     //   </div>
+    //   <div className="mt-1">
+    //     <Link className="mobile-btn !mt-10" href={'/auth/final'}>I&apos;m all set</Link>
+    //     <p className='text-white text-sm font-medium mt-3'>How to Troubleshoot </p>
+    //     <p className='text-white text-sm font-medium mt-3'>If you ever have trouble, email <Link href='mailto:support@visaface.online' className=''>support@visaface.online</Link></p>
+    //   </div>
     // </div>
-    <div className="bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-25">
-    <div className="flex justify-center items-center flex-col text-center">
-      <div className='relative'>
-        <Image src={'/logo.svg'} alt="logo" height={115} width={300} quality={100} />
-        <Image src={'/images/mobile/01.svg'} alt="logo" height={350} width={300} quality={100} className='absolute top-0 left-0' />
-        <div className='py-28 text-center'>
-          <h5 className='text-white text-md  font-bold mb-8'>Hello {userData.name},</h5>
-          <p className='text-white text-sm font-medium mb-8'>Your face has been successfully <br/> enrolled.</p>
-          <p className='text-white text-sm font-medium'>From now on, just smile at <br/> any of our Verifier screens and <br/> you&apos;ll breeze right in.</p>
-        </div>
-      </div>
-      <div className="mt-1">
-        <Link className="mobile-btn !mt-10" href={'/auth/final'}>I&apos;m all set</Link>
-        <p className='text-white text-sm font-medium mt-3'>How to Troubleshoot </p>
-        <p className='text-white text-sm font-medium mt-3'>If you ever have trouble, email <Link href='mailto:support@visaface.online' className=''>support@visaface.online</Link></p>
-      </div>
+    // </div>
+    <div className="!bg-[url('/images/mobile/bg-four.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
+    <div className="w-full text-center">
+      <Image
+        src={"/logo.svg"}
+        alt="logo"
+        height={107}
+        width={220}
+        quality={100}
+        className="mx-auto mb-12"
+      />
+      <h2 className="mt-20 mb-9 text-base text-white font-bold text-center font-inter">
+        Hello {userData.name},
+      </h2>
+      <p className="text-[15px] text-white font-normal text-center mb-3">
+        Your face has been successfully <br /> enrolled.
+      </p>
+      <p className="text-[15px] text-white font-normal text-center mb-[230px]">
+        From now on, just smile at <br />
+        any of our Verifier screens and <br />
+        you’ll breeze right in.
+      </p>
+      <Link href={"/auth/final"} className="mobile-btn two !mt-5 !text-white">
+        I’m all set
+      </Link>
+
+      <p className="text-xs text-white mt-4">
+        How to Troubleshoot <br />
+        If you ever have trouble, email <i>support@visaface.online</i>
+      </p>
     </div>
-    </div>
+  </div>
   );
 }
