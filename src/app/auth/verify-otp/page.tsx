@@ -263,7 +263,7 @@ function VerifyOTPContent() {
                       inputRefs.current[index] = el;
                     }
                   }}
-                  type="text"
+                  type="number"
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
