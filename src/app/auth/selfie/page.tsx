@@ -235,7 +235,7 @@ export default function SelfiePage() {
           <div className="absolute inset-0 -top-60  flex items-center justify-center pointer-events-none">
             <div className="w-64 h-74 border-5 border-dashed border-green-600 rounded-full opacity-80"></div>
           </div>
-          <div className="absolute inset-0 -top-60  flex items-center justify-center pointer-events-none">
+          <div className="absolute inset-0  flex items-center justify-center pointer-events-none">
             <div className="w-64 h-74 border-5 border-dashed border-green-600 rounded-full opacity-80"></div>
           </div>
           <div className="absolute mt-10 top-0 left-0 right-0">
