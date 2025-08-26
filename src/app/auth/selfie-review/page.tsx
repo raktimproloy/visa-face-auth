@@ -1,18 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useAppSelector, useAppDispatch } from "../../../store/hooks";
+
 import { useRouter } from "next/navigation";
-import { setUploadedPhotoUrl, setBiometricEnrollmentData, updateEnrollmentStatus } from "../../../store/slices/authSlice";
+
 import Image from "next/image";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
 import Link from "next/link";
 
 export default function SelfieReviewPage() {
   // Auth protection - redirect to register if no user data
-  const { isAuthenticated } = useAuthProtection();
+  const { isAuthenticated, userData } = useAuthProtection();
   
-  const { registrationData } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -21,14 +19,14 @@ export default function SelfieReviewPage() {
 
   // Check if user has already completed biometric verification
   useEffect(() => {
-    if (registrationData?.biometricStatus === 'completed') {
+    if (userData?.biometricStatus === 'completed') {
       // Only redirect if they haven't just completed it
       if (!hasAttemptedUpload) {
         console.log('User already completed biometric, redirecting to final');
         router.push('/auth/success');
       }
     }
-  }, [registrationData?.biometricStatus, hasAttemptedUpload, router]);
+  }, [userData?.biometricStatus, hasAttemptedUpload, router]);
 
   const handleRetake = () => {
     // Clear any previous upload attempts
@@ -39,13 +37,16 @@ export default function SelfieReviewPage() {
   };
 
   const handleUpload = async () => {
+    // Get photo from localStorage
+    const photoData = localStorage.getItem('capturedPhoto');
+    
     // Validate enrollment status and authentication
-    if (!registrationData?.customerId) {
+    if (!userData?.customerId) {
       setUploadError('Invalid enrollment status. Please register again.');
       return;
     }
 
-    if (!registrationData?.photo) {
+    if (!photoData) {
       setUploadError('No photo available to upload');
       return;
     }
@@ -64,7 +65,7 @@ export default function SelfieReviewPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          photoData: registrationData.photo
+          photoData: photoData
         }),
       });
 
@@ -76,14 +77,11 @@ export default function SelfieReviewPage() {
       const uploadResult = await uploadResponse.json();
       console.log('Photo uploaded successfully:', uploadResult.photoUrl);
 
-      // Update Redux with the S3 URL
-      dispatch(setUploadedPhotoUrl(uploadResult.photoUrl));
-
       // Step 2: Call the enrollment verification API through our proxy
       console.log('Calling enrollment verification API...');
       
       const enrollmentPayload = {
-        customerId: registrationData.customerId
+        customerId: userData.customerId
       };
 
       console.log('Calling enrollment API with payload:', enrollmentPayload);
@@ -117,18 +115,7 @@ export default function SelfieReviewPage() {
 
       // Check if enrollment was approved
       if (enrollmentData.approved === true) {
-        // Update Redux with successful enrollment data
-        dispatch(setBiometricEnrollmentData({
-          customerId: registrationData.customerId,
-          enrollmentId: enrollmentData.enrollmentId || registrationData.enrollmentId || '',
-          biometricStatus: 'completed',
-          idmissionValid: true,
-        }));
-
-        // Update enrollment status to completed
-        dispatch(updateEnrollmentStatus('completed'));
-
-        console.log('Enrollment approved for user:', registrationData.customerId);
+        console.log('Enrollment approved for user:', userData.customerId);
         
         // Show success message
         setSuccessMessage('Enrollment successful! Your face verification has been approved.');
@@ -136,8 +123,8 @@ export default function SelfieReviewPage() {
         // Update JWT token with new enrollment data
         try {
           console.log('Updating JWT token with new enrollment data:', {
-            customerId: registrationData.customerId,
-            enrollmentId: enrollmentData.enrollmentId || registrationData.enrollmentId || '',
+            customerId: userData.customerId,
+            enrollmentId: enrollmentData.enrollmentId || userData.enrollmentId || '',
             enrollmentStatus: 'completed',
             biometricStatus: 'completed',
             idmissionValid: true
@@ -149,8 +136,8 @@ export default function SelfieReviewPage() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              customerId: registrationData.customerId,
-              enrollmentId: enrollmentData.enrollmentId || registrationData.enrollmentId || '',
+              customerId: userData.customerId,
+              enrollmentId: enrollmentData.enrollmentId || userData.enrollmentId || '',
               enrollmentStatus: 'completed',
               biometricStatus: 'completed',
               idmissionValid: true
@@ -178,15 +165,7 @@ export default function SelfieReviewPage() {
         
       } else {
         // Enrollment not approved
-        console.log('Enrollment not approved for user:', registrationData.customerId, 'Reason:', enrollmentData.verificationResult);
-        
-        // Update Redux with failed biometric status to allow retry
-        dispatch(setBiometricEnrollmentData({
-          customerId: registrationData.customerId,
-          enrollmentId: enrollmentData.enrollmentId || registrationData.enrollmentId || '',
-          biometricStatus: 'failed',
-          idmissionValid: false,
-        }));
+        console.log('Enrollment not approved for user:', userData.customerId, 'Reason:', enrollmentData.verificationResult);
         
         // Update JWT token with failed biometric status to allow retry
         try {
@@ -198,8 +177,8 @@ export default function SelfieReviewPage() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              customerId: registrationData.customerId,
-              enrollmentId: enrollmentData.enrollmentId || registrationData.enrollmentId || '',
+              customerId: userData.customerId,
+              enrollmentId: enrollmentData.enrollmentId || userData.enrollmentId || '',
               enrollmentStatus: 'pending', // Keep as pending to allow retry
               biometricStatus: 'failed',
               idmissionValid: false
@@ -259,12 +238,15 @@ export default function SelfieReviewPage() {
     );
   }
 
+  // Get photo from localStorage
+  const photoData = localStorage.getItem('capturedPhoto');
+
   // Debug logging
-  console.log('SelfieReviewPage - registrationData:', registrationData);
-  console.log('SelfieReviewPage - photo exists:', !!registrationData?.photo);
+  console.log('SelfieReviewPage - userData:', userData);
+  console.log('SelfieReviewPage - photo exists:', !!photoData);
 
   // If no photo is available, show error instead of redirecting
-  if (!registrationData?.photo) {
+  if (!photoData) {
     return (
       <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-9">
         <div className="w-full text-center">
@@ -288,7 +270,7 @@ export default function SelfieReviewPage() {
         <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5">Satisfied with your photo?</button>
         
         <Image
-          src={registrationData.photo}
+          src={photoData || ''}
           alt="Selfie preview"
           width={424}
           height={502}

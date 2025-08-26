@@ -1,15 +1,13 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useAppSelector } from "../../../store/hooks";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
 import { useRouter } from "next/navigation";
 
 export default function FinalPage() {
   const router = useRouter();
   // Auth protection - redirect to register if no user data
-  const { isAuthenticated } = useAuthProtection();
-  const { registrationData } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, userData } = useAuthProtection();
 
   // Show loading state while checking auth
   if (!isAuthenticated) {
@@ -26,21 +24,21 @@ export default function FinalPage() {
   }
 
   // Debug logging
-  console.log('FinalPage - registrationData:', registrationData);
+  console.log('FinalPage - userData:', userData);
   console.log('FinalPage - status values:', {
-    enrollmentStatus: registrationData?.enrollmentStatus,
-    biometricStatus: registrationData?.biometricStatus,
-    customerId: registrationData?.customerId
+    enrollmentStatus: userData?.enrollmentStatus,
+    biometricStatus: userData?.biometricStatus,
+    customerId: userData?.customerId
   });
 
   // Check if user has completed biometric verification
   // Only allow access if biometric status is 'completed'
-  const hasCompletedBiometric = registrationData?.biometricStatus === 'completed';
+  const hasCompletedBiometric = userData?.biometricStatus === 'completed';
   const canAccessFinalPage = hasCompletedBiometric;
 
   if (!canAccessFinalPage) {
     console.log('FinalPage - Access denied, biometric status not complete');
-    console.log('FinalPage - biometricStatus:', registrationData?.biometricStatus);
+    console.log('FinalPage - biometricStatus:', userData?.biometricStatus);
     router.push('/auth/selfie-policy');
     return null;
   }
@@ -49,7 +47,7 @@ export default function FinalPage() {
   console.log('FinalPage - User completed:', {
     biometric: hasCompletedBiometric
   });
-  console.log('FinalPage - Full user data:', registrationData);
+  console.log('FinalPage - Full user data:', userData);
 
   return (
     <div className="!bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-25">

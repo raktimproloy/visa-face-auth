@@ -50,7 +50,7 @@ export default function Home() {
             Get Started
           </Link>
           <p className="md:text-base text-xs text-[#CCCAD2] font-normal text-center mt-3">
-            Already have an account?<Link href={"/auth/login"}>Log in</Link>
+            Already have an account?<Link href={"/auth/login"}> Log in</Link>
           </p>
         </div>
       </div>

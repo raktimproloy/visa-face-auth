@@ -2,13 +2,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
-import { useAppSelector } from "../../../store/hooks";
 import Link from "next/link";
 
 export default function SelfiePolicyPage() {
   // Auth protection - redirect to register if no user data
-  const { isAuthenticated } = useAuthProtection();
-  const { registrationData } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, userData } = useAuthProtection();
   
   // State for privacy policy checkbox
   const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
@@ -29,7 +27,7 @@ export default function SelfiePolicyPage() {
   }
 
   // Check if user has already completed biometric verification
-  if (registrationData?.biometricStatus === 'completed') {
+  if (userData?.biometricStatus === 'completed') {
     // Show completion message instead of redirecting
     return (
       <div className="!bg-[url('/images/mobile/bg-three.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-10">

@@ -94,7 +94,10 @@ export async function POST(request: NextRequest) {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email.toLowerCase(),
-          enrollmentStatus: user.enrollmentStatus
+          enrollmentStatus: user.enrollmentStatus,
+          biometricStatus: user.biometricStatus,
+          idmissionValid: user.idmissionValid,
+          photoUrl: user.photoUrl || ''
         },
         jwtSecret,
         { expiresIn: '24h' }

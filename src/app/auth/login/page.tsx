@@ -225,6 +225,11 @@ export default function LoginPage() {
               />
             </div>
           </div>
+          {error && (
+            <div className="col-span-2 text-red-500 rounded text-center text-sm">
+              {error}
+            </div>
+          )}
           <div className="col-span-2 mt-20 text-center">
           <button
             type="submit"

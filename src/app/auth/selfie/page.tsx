@@ -2,15 +2,14 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Camera } from "react-camera-pro";
 import { useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setPhoto } from "../../../store/slices/authSlice";
+
+
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
-import { setBiometricEnrollmentData } from "../../../store/slices/authSlice";
+
 
 export default function SelfiePage() {
   // Auth protection - redirect to register if no user data
-  const { isAuthenticated } = useAuthProtection();
-  const { registrationData } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, userData } = useAuthProtection();
   
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +18,6 @@ export default function SelfiePage() {
   
   const cameraRef = useRef<{ takePhoto: () => Promise<string> } | null>(null);
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
   const startCamera = useCallback(async () => {
     try {
@@ -68,9 +66,9 @@ export default function SelfiePage() {
         const photo = await cameraRef.current.takePhoto();
         console.log('Photo captured, size:', photo.length);
         
-        // Store photo data in Redux for review (base64 format)
-        dispatch(setPhoto(photo));
-        console.log('Photo stored in Redux, redirecting to review page...');
+        // Store photo data in localStorage for review (base64 format)
+        localStorage.setItem('capturedPhoto', photo);
+        console.log('Photo stored in localStorage, redirecting to review page...');
         
         // Redirect to review page
         router.push('/auth/selfie-review');
@@ -79,7 +77,7 @@ export default function SelfiePage() {
         setError('Failed to take photo. Please try again.');
       }
     }
-  }, [dispatch, router]);
+  }, [router]);
 
 
 
@@ -101,7 +99,7 @@ export default function SelfiePage() {
   }
 
   // Check if user has already completed biometric verification
-  if (registrationData?.biometricStatus === 'completed') {
+  if (userData?.biometricStatus === 'completed') {
     // Show completion message instead of redirecting
     return (
       <div className="!bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-9">
@@ -116,14 +114,8 @@ export default function SelfiePage() {
           <div className="space-y-3">
             <button
               onClick={() => {
-                // Reset biometric status to allow retake
-                dispatch(setBiometricEnrollmentData({
-                  customerId: registrationData.customerId || '',
-                  enrollmentId: registrationData.enrollmentId || '',
-                  biometricStatus: 'pending',
-                  idmissionValid: false,
-                }));
-                // Start camera for new photo
+                // For now, just start camera for new photo
+                // In a real app, you'd call an API to reset the status
                 startCamera();
               }}
               className="mobile-btn !text-[#B20610] !mx-auto !block"
@@ -239,6 +231,13 @@ export default function SelfiePage() {
               switchCamera: 'Switch camera'
             }}
           />
+          {/* Face positioning guide - circular dotted green border */}
+          <div className="absolute inset-0 -top-60  flex items-center justify-center pointer-events-none">
+            <div className="w-64 h-74 border-5 border-dashed border-green-600 rounded-full opacity-80"></div>
+          </div>
+          <div className="absolute inset-0 -top-60  flex items-center justify-center pointer-events-none">
+            <div className="w-64 h-74 border-5 border-dashed border-green-600 rounded-full opacity-80"></div>
+          </div>
           <div className="absolute mt-10 top-0 left-0 right-0">
             <button className="sm-btn">Hold Still</button>
           </div>

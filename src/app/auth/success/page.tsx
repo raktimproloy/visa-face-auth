@@ -1,16 +1,12 @@
 'use client';
 
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
 import Image from "next/image";
 import Link from "next/link";
 import { useAuthProtection } from '../../../hooks/useAuthProtection';
 
 export default function SuccessPage() {
   // Auth protection - redirect to register if no user data
-  const { isAuthenticated } = useAuthProtection();
-  
-  const { registrationData } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, userData } = useAuthProtection();
 
   // Show loading state while checking auth
   if (!isAuthenticated) {
@@ -28,20 +24,20 @@ export default function SuccessPage() {
   }
 
   // Check if user has completed biometric verification
-  if (registrationData?.biometricStatus !== 'completed') {
+  if (userData?.biometricStatus !== 'completed') {
     // Redirect to selfie-policy if biometric is not completed
     window.location.href = '/auth/selfie-policy';
     return null;
   }
 
   // Get user data with fallbacks
-  const userData = {
-    name: `${registrationData?.firstName || ''} ${registrationData?.lastName || ''}`.trim() || '',
-    customerId: registrationData?.customerId || 'N/A',
-    enrollmentId: registrationData?.enrollmentId || 'N/A',
-    biometricStatus: registrationData?.biometricStatus || 'pending',
-    idmissionValid: registrationData?.idmissionValid || false,
-    photoUrl: registrationData?.photo || ''
+  const userDisplayData = {
+    name: `${userData?.firstName || ''} ${userData?.lastName || ''}`.trim() || '',
+    customerId: userData?.customerId || 'N/A',
+    enrollmentId: userData?.enrollmentId || 'N/A',
+    biometricStatus: userData?.biometricStatus || 'pending',
+    idmissionValid: userData?.idmissionValid || false,
+    photoUrl: userData?.photo || ''
   };
 
   return (
@@ -56,7 +52,7 @@ export default function SuccessPage() {
         className="mx-auto mb-12"
       />
       <h2 className="mt-20 mb-9 text-base text-white font-bold text-center font-inter">
-        Hello {userData.name},
+        Hello {userDisplayData.name},
       </h2>
       <p className="text-[15px] text-white font-normal text-center mb-3">
         Your face has been successfully <br /> enrolled.
