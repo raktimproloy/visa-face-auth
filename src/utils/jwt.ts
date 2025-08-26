@@ -9,6 +9,8 @@ export interface JWTPayload {
   enrollmentStatus: string;
   biometricStatus?: string;
   idmissionValid?: boolean;
+  emailVerified?: boolean;  // Add email verification status
+  photoUrl?: string;         // Add photo URL for consistency
 }
 
 export function verifyToken(token: string): JWTPayload | null {

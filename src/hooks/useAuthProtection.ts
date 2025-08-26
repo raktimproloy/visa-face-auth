@@ -7,6 +7,12 @@ export const useAuthProtection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<any>(null);
 
+  // Function to clear invalid auth tokens
+  const clearAuthToken = () => {
+    document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    console.log('Auth token cleared due to invalid verification status');
+  };
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -36,16 +42,108 @@ export const useAuthProtection = () => {
         console.log('JWT token verified successfully:', {
           customerId: decodedUser.customerId,
           enrollmentStatus: decodedUser.enrollmentStatus,
-          biometricStatus: decodedUser.biometricStatus
+          biometricStatus: decodedUser.biometricStatus,
+          emailVerified: decodedUser.emailVerified
         });
+
+        // Additional validation: ensure all required fields are present
+        const requiredFields = ['customerId', 'email', 'emailVerified'];
+        const missingFields = requiredFields.filter(field => !decodedUser[field]);
+        
+        if (missingFields.length > 0) {
+          console.log('JWT token missing required fields:', missingFields);
+          clearAuthToken();
+          router.push('/auth/register');
+          return;
+        }
+
+        // Validate that the JWT token has all required fields
+        // Check if emailVerified field exists, is a boolean, and is explicitly true
+        // Also check that it's not a string "true" but actually boolean true
+        if (!decodedUser.hasOwnProperty('emailVerified') || 
+            typeof decodedUser.emailVerified !== 'boolean' || 
+            decodedUser.emailVerified !== true ||
+            decodedUser.emailVerified === "true" ||  // String "true" is not valid
+            decodedUser.emailVerified === 1) {       // Number 1 is not valid
+          console.log('JWT token emailVerified field invalid. Token is invalid.', {
+            hasEmailVerifiedField: decodedUser.hasOwnProperty('emailVerified'),
+            emailVerifiedValue: decodedUser.emailVerified,
+            emailVerifiedType: typeof decodedUser.emailVerified,
+            isStringTrue: decodedUser.emailVerified === "true",
+            isNumberOne: decodedUser.emailVerified === 1,
+            tokenPayload: decodedUser
+          });
+          
+          // Clear the invalid token
+          clearAuthToken();
+          
+          // Redirect to OTP verification
+          router.push('/auth/verify-otp');
+          return;
+        }
 
         // Store user data locally
         setUserData(decodedUser);
         setIsAuthenticated(true);
 
-        // Check biometric status and handle routing
+            // Double-check email verification status (redundant but extra security)
+    // At this point, emailVerified should already be validated as true above
+    // Additional check to ensure it's boolean true, not string "true" or number 1
+    const isEmailVerified = decodedUser.emailVerified === true && 
+                           typeof decodedUser.emailVerified === 'boolean' &&
+                           decodedUser.emailVerified !== "true" &&
+                           decodedUser.emailVerified !== 1;
+    const currentPath = window.location.pathname;
+
+    console.log('Double-checking email verification status:', {
+      emailVerified: decodedUser.emailVerified,
+      isEmailVerified,
+      currentPath,
+      hasEmailVerifiedField: 'emailVerified' in decodedUser,
+      emailVerifiedType: typeof decodedUser.emailVerified,
+      isStringTrue: decodedUser.emailVerified === "true",
+      isNumberOne: decodedUser.emailVerified === 1
+    });
+
+    if (!isEmailVerified) {
+      // User email is not verified - redirect to OTP verification
+      // But don't redirect if they're already on the OTP verification page
+      if (currentPath !== '/auth/verify-otp') {
+        console.log('User email not verified, redirecting to OTP verification. Clearing invalid auth token.');
+        
+        // Clear the invalid auth token since user is not properly verified
+        clearAuthToken();
+        
+        router.push('/auth/verify-otp');
+        return;
+      } else {
+        // User is on OTP verification page, allow access
+        console.log('User email not verified but on OTP verification page, allowing access');
+        setIsLoading(false);
+        return;
+      }
+    }
+
+    // Additional security: if user is on OTP verification page but email is verified,
+    // redirect them to the appropriate page based on their status
+    if (currentPath === '/auth/verify-otp' && isEmailVerified) {
+      console.log('User email already verified but on OTP page, redirecting based on biometric status');
+      if (decodedUser.biometricStatus === 'completed') {
+        router.push('/auth/final');
+      } else {
+        router.push('/auth/selfie-policy');
+      }
+      return;
+    }
+
+        // Email is verified, now check biometric status and handle routing
         const isBiometricCompleted = decodedUser.biometricStatus === 'completed';
-        const currentPath = window.location.pathname;
+        
+        console.log('Email verification passed, checking biometric status:', {
+          biometricStatus: decodedUser.biometricStatus,
+          isBiometricCompleted,
+          currentPath
+        });
         
         if (isBiometricCompleted) {
           // User has completed biometric verification

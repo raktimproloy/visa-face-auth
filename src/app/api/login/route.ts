@@ -77,7 +77,88 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Generate JWT token
+      // Check if email is verified
+      if (!user.emailVerified) {
+        console.log('User email not verified, generating new OTP and redirecting to verification');
+        console.log('User details:', {
+          customerId: user.customerId,
+          email: user.email,
+          firstName: user.firstName,
+          emailVerified: user.emailVerified
+        });
+        
+        // Generate new OTP data
+        const { createOTPData } = await import('../../../utils/otpUtils');
+        const otpData = createOTPData();
+        
+        console.log('Generated new OTP for user:', {
+          customerId: user.customerId,
+          otpCode: otpData.code,
+          expiresAt: otpData.expiresAt
+        });
+        
+        // Update user with new OTP
+        const { UpdateItemCommand } = await import('@aws-sdk/client-dynamodb');
+        const updateCommand = new UpdateItemCommand({
+          TableName: tableName,
+          Key: marshall({
+            customerId: user.customerId
+          }),
+          UpdateExpression: 'SET otpCode = :otpCode, otpExpiresAt = :otpExpiresAt, otpAttempts = :otpAttempts, otpVerified = :otpVerified, updatedAt = :updatedAt',
+          ExpressionAttributeValues: marshall({
+            ':otpCode': otpData.code,
+            ':otpExpiresAt': otpData.expiresAt,
+            ':otpAttempts': 0,
+            ':otpVerified': false,
+            ':updatedAt': new Date().toISOString()
+          })
+        });
+
+        await dynamoClient.send(updateCommand);
+        console.log('Updated user with new OTP in DynamoDB');
+        
+        // Send new OTP email
+        const { EmailService } = await import('../../../utils/emailService');
+        let emailSent = false;
+        try {
+          emailSent = await EmailService.sendOTPEmail(
+            user.email.toLowerCase(),
+            otpData.code,
+            user.firstName
+          );
+          console.log('OTP email sent successfully:', emailSent);
+        } catch (emailError) {
+          console.error('Error sending OTP email during login:', emailError);
+        }
+
+              // Return response indicating email verification needed
+      // IMPORTANT: Do NOT generate JWT token for unverified users
+      const response = {
+        success: true,
+        message: 'Login successful but email verification required',
+        user: {
+          customerId: user.customerId,
+          enrollmentId: user.enrollmentId,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email.toLowerCase(),
+          enrollmentStatus: user.enrollmentStatus,
+          biometricStatus: user.biometricStatus,
+          idmissionValid: user.idmissionValid,
+          photoUrl: user.photoUrl || '',
+          emailVerified: false
+        },
+        requiresEmailVerification: true,
+        emailSent
+      };
+      
+      console.log('Returning email verification response (NO JWT token generated):', response);
+      return NextResponse.json(response);
+      }
+
+      // Generate JWT token ONLY for users with verified email
+      console.log('User email verified, generating JWT token for:', user.email);
+      
       const jwtSecret = process.env.JWT_SECRET;
       if (!jwtSecret) {
         console.error('JWT_SECRET environment variable is not set');
@@ -87,6 +168,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      // Create JWT token with verified email status
       const token = jwt.sign(
         {
           customerId: user.customerId,
@@ -97,7 +179,8 @@ export async function POST(request: NextRequest) {
           enrollmentStatus: user.enrollmentStatus,
           biometricStatus: user.biometricStatus,
           idmissionValid: user.idmissionValid,
-          photoUrl: user.photoUrl || ''
+          photoUrl: user.photoUrl || '',
+          emailVerified: user.emailVerified  // This should be true for verified users
         },
         jwtSecret,
         { expiresIn: '24h' }
@@ -113,7 +196,8 @@ export async function POST(request: NextRequest) {
         enrollmentStatus: user.enrollmentStatus,
         biometricStatus: user.biometricStatus,
         idmissionValid: user.idmissionValid,
-        photoUrl: user.photoUrl || ''
+        photoUrl: user.photoUrl || '',
+        emailVerified: user.emailVerified
       };
 
       // Create response
@@ -123,8 +207,8 @@ export async function POST(request: NextRequest) {
         user: userResponse
       });
 
-      // Set JWT token in HTTP-only cookie
-      console.log('Setting auth-token cookie for login with token length:', token.length);
+      // Set JWT token in HTTP-only cookie for verified user
+      console.log('Setting auth-token cookie for verified user login with token length:', token.length);
       response.cookies.set('auth-token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -133,7 +217,7 @@ export async function POST(request: NextRequest) {
         path: '/'
       });
 
-      console.log('Login successful for user:', user.email, 'enrollmentStatus:', user.enrollmentStatus);
+      console.log('Login successful for verified user:', user.email, 'enrollmentStatus:', user.enrollmentStatus, 'emailVerified:', user.emailVerified);
       return response;
 
     } catch (gsiError) {

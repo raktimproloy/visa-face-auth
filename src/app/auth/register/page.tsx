@@ -130,23 +130,10 @@ export default function RegisterPage() {
       if (result.success) {
         console.log('Registration successful, storing user data in Redux:', result.user);
         
-        // Store user data in Redux for the flow
-        dispatch(setRegistrationData({
-          firstName,
-          lastName,
-          email,
-          password,
-          customerId: result.user.customerId,
-          enrollmentId: result.user.enrollmentId,
-          enrollmentStatus: result.user.enrollmentStatus,
-          biometricStatus: result.user.biometricStatus,
-          idmissionValid: result.user.idmissionValid
-        }));
+        console.log('Registration successful, redirecting to OTP verification');
         
-        console.log('Redux data stored, redirecting to selfie-policy page');
-        
-        // Redirect to selfie policy page
-        router.push("/auth/selfie-policy");
+        // Redirect to OTP verification page
+        router.push(`/auth/verify-otp?customerId=${result.user.customerId}&email=${encodeURIComponent(email)}&firstName=${encodeURIComponent(firstName)}`);
       } else {
         setEmailError("Registration failed. Please try again.");
         setIsSubmitting(false);

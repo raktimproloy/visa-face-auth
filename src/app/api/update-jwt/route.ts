@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
       const decoded = jwt.verify(currentToken.value, jwtSecret) as any;
       
       // Create new JWT token with updated enrollment data
+      // IMPORTANT: Preserve emailVerified status from original token
       const newToken = jwt.sign(
         {
           customerId: decoded.customerId,
@@ -47,7 +48,8 @@ export async function POST(request: NextRequest) {
           email: decoded.email,
           enrollmentStatus: enrollmentStatus || decoded.enrollmentStatus,
           biometricStatus: biometricStatus || decoded.biometricStatus,
-          idmissionValid: idmissionValid !== undefined ? idmissionValid : decoded.idmissionValid
+          idmissionValid: idmissionValid !== undefined ? idmissionValid : decoded.idmissionValid,
+          emailVerified: decoded.emailVerified  // Preserve email verification status
         },
         jwtSecret,
         { expiresIn: '24h' }
@@ -75,7 +77,7 @@ export async function POST(request: NextRequest) {
         path: '/'
       });
 
-      console.log('JWT token updated for user:', customerId, 'with new enrollment status:', enrollmentStatus);
+      console.log('JWT token updated for user:', customerId, 'with new enrollment status:', enrollmentStatus, 'preserving emailVerified:', decoded.emailVerified);
       return response;
 
     } catch (jwtError) {

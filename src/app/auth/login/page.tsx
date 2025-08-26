@@ -57,7 +57,14 @@ export default function LoginPage() {
           photo: result.user.photoUrl
         }));
 
-        // Redirect based on biometric status
+        // Check if email verification is required
+        if (result.requiresEmailVerification) {
+          console.log('Email verification required, redirecting to OTP verification');
+          router.push('/auth/verify-otp');
+          return;
+        }
+
+        // Redirect based on biometric status (only for verified users)
         if (result.user.biometricStatus === 'completed') {
           console.log('User biometric completed, redirecting to final page');
           router.push('/auth/final');

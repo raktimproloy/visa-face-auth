@@ -38,10 +38,25 @@
     "ReadCapacityUnits": 5,
     "WriteCapacityUnits": 5
   },
-  "StreamSpecification": {
-    "StreamEnabled": false
-  },
-  "SSESpecification": {
-    "Enabled": false
+  "ItemSchema": {
+    "customerId": "S",
+    "enrollmentId": "S",
+    "firstName": "S",
+    "lastName": "S",
+    "email": "S",
+    "password": "S",
+    "photoUrl": "S",
+    "photoFileName": "S",
+    "biometricStatus": "S",
+    "idmissionValid": "BOOL",
+    "enrollmentStatus": "S",
+    "emailVerified": "BOOL",
+    "otpCode": "S",
+    "otpExpiresAt": "N",
+    "otpAttempts": "N",
+    "otpVerified": "BOOL",
+    "lastOtpSent": "N",
+    "createdAt": "S",
+    "updatedAt": "S"
   }
 }

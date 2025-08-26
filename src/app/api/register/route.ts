@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
-import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import jwt from 'jsonwebtoken';
+import { DynamoDBClient, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { marshall } from '@aws-sdk/util-dynamodb';
+import { EmailService } from '../../../utils/emailService';
+import { createOTPData } from '../../../utils/otpUtils';
 import bcrypt from 'bcryptjs';
 
 // Initialize DynamoDB client
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
       tableName: !!tableName,
       region: !!region,
       accessKeyId: !!accessKeyId,
-      jwtSecret: !!process.env.JWT_SECRET
+      sesFromEmail: !!process.env.SES_FROM_EMAIL
     });
     
     if (!tableName) {
@@ -58,9 +59,6 @@ export async function POST(request: NextRequest) {
 
     // Check if email already exists using the EmailIndex GSI
     try {
-      // Use QueryCommand instead of GetItemCommand for GSI
-      const { QueryCommand } = await import('@aws-sdk/client-dynamodb');
-      
       const queryCommand = new QueryCommand({
         TableName: tableName,
         IndexName: 'EmailIndex',
@@ -91,7 +89,10 @@ export async function POST(request: NextRequest) {
     const customerId = generateCustomerId();
     const enrollmentId = generateEnrollmentId();
 
-    // Create user item
+    // Generate OTP data
+    const otpData = createOTPData();
+
+    // Create temporary user item (pending verification)
     const userItem = {
       customerId,
       enrollmentId,
@@ -104,6 +105,11 @@ export async function POST(request: NextRequest) {
       biometricStatus: 'pending',
       idmissionValid: false,
       enrollmentStatus: 'pending',
+      emailVerified: false, // New field for email verification
+      otpCode: otpData.code, // Store OTP code
+      otpExpiresAt: otpData.expiresAt, // Store OTP expiration
+      otpAttempts: 0, // Store OTP attempts
+      otpVerified: false, // Store OTP verification status
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -112,7 +118,8 @@ export async function POST(request: NextRequest) {
     console.log('Attempting to save user to DynamoDB:', {
       tableName: tableName,
       customerId,
-      email: email.toLowerCase()
+      email: email.toLowerCase(),
+      otpCode: otpData.code
     });
     
     const putCommand = new PutItemCommand({
@@ -121,32 +128,36 @@ export async function POST(request: NextRequest) {
     });
 
     await dynamoClient.send(putCommand);
-    console.log('User registered successfully:', customerId);
+    console.log('User registered successfully (pending verification):', customerId);
 
-    // Generate JWT token
-    const jwtSecret = process.env.JWT_SECRET;
-    if (!jwtSecret) {
-      console.error('JWT_SECRET environment variable is not set');
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      );
-    }
+    // Send OTP verification email
+    let emailStatus = 'pending';
+    let emailErrorDetails = null;
     
-    const token = jwt.sign(
-      {
-        customerId,
-        enrollmentId,
-        firstName,
-        lastName,
-        email: email.toLowerCase(),
-        enrollmentStatus: 'pending'
-      },
-      jwtSecret,
-      { expiresIn: '24h' }
-    );
+    try {
+      const emailSent = await EmailService.sendOTPEmail(
+        email.toLowerCase(),
+        otpData.code,
+        firstName
+      );
 
-    // Create response with user data (excluding password)
+      if (!emailSent) {
+        console.error('Failed to send OTP email, but user was created');
+        emailStatus = 'failed';
+        emailErrorDetails = 'Email service temporarily unavailable';
+        // User was created but email failed - they can request resend later
+      } else {
+        console.log('OTP verification email sent successfully');
+        emailStatus = 'sent';
+      }
+    } catch (emailError: any) {
+      console.error('Error sending OTP email:', emailError);
+      emailStatus = 'failed';
+      emailErrorDetails = emailError.message || 'Unknown email error';
+      // User was created but email failed - they can request resend later
+    }
+
+    // Create response with user data (excluding sensitive info)
     const userResponse = {
       customerId,
       enrollmentId,
@@ -155,27 +166,25 @@ export async function POST(request: NextRequest) {
       email: email.toLowerCase(),
       enrollmentStatus: 'pending',
       biometricStatus: 'pending',
-      idmissionValid: false
+      idmissionValid: false,
+      emailVerified: false,
+      emailStatus,
+      message: emailStatus === 'sent' ? 'Please check your email for verification code' : 'Registration successful but email verification pending'
     };
 
     // Create response
     const response = NextResponse.json({
       success: true,
-      message: 'User registered successfully',
-      user: userResponse
+      message: emailStatus === 'sent' 
+        ? 'Registration successful! Please check your email for verification code.'
+        : 'Registration successful! Email verification will be sent shortly.',
+      user: userResponse,
+      requiresVerification: true,
+      emailStatus,
+      ...(emailErrorDetails && { emailError: emailErrorDetails })
     });
 
-    // Set JWT token in HTTP-only cookie
-    console.log('Setting auth-token cookie with token length:', token.length);
-    response.cookies.set('auth-token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax', // Changed from 'strict' to 'lax' for better compatibility
-      maxAge: 24 * 60 * 60, // 24 hours
-      path: '/'
-    });
-
-    console.log('Cookie set successfully, returning response');
+    console.log('Registration response sent successfully');
     return response;
 
   } catch (error) {
