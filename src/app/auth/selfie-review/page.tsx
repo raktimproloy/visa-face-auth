@@ -269,13 +269,19 @@ export default function SelfieReviewPage() {
       <div className="w-full">
         <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5">Satisfied with your photo?</button>
         
-        <Image
-          src={photoData || ''}
-          alt="Selfie preview"
-          width={424}
-          height={502}
-          className="mx-auto max-h-[500px]"
-        />
+        <div className="mx-auto max-w-[424px] max-h-[500px] overflow-hidden rounded-lg shadow-lg">
+          <Image
+            src={photoData || ''}
+            alt="Selfie preview"
+            width={424}
+            height={502}
+            quality={100}
+            className="w-full h-auto object-contain"
+            style={{
+              maxHeight: '500px'
+            }}
+          />
+        </div>
         
         {/* Success Message */}
         {successMessage && (
