@@ -208,40 +208,40 @@ function VerifyOTPContent() {
 
   if (!customerId || !email) {
     return (
-      <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
+      <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-16 sm:pt-20">
         <div className="w-full text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-sm text-[#3F3F3F] font-medium">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-white mx-auto mb-3 sm:mb-4"></div>
+          <p className="text-xs sm:text-sm text-[#3F3F3F] font-medium">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="!bg-[url('/images/mobile/bg-two-1.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-10">
-      <div className="w-full max-w-md mx-auto px-4">
+    <div className="!bg-[url('/images/mobile/bg-two-1.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-16 sm:pt-20 pb-6 sm:pb-10">
+      <div className="w-full max-w-md mx-auto px-3 sm:px-4">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 sm:mb-8">
           <Image
             src="/images/mobile/favicon.svg"
             alt="VisaFace Logo"
-            width={80}
-            height={80}
-            className="mx-auto mb-4"
+            width={60}
+            height={60}
+            className="mx-auto mb-3 sm:mb-4 sm:w-20 sm:h-20"
           />
           
           {/* Show different message based on flow */}
           {!searchParams.get('customerId') && registrationData ? (
             <div className="mb-4">
-              <h1 className="text-2xl font-bold text-white mb-2">Email Verification Required</h1>
-              <p className="text-sm text-gray-300">
+              <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">Email Verification Required</h1>
+              <p className="text-xs sm:text-sm text-gray-300">
                 Please verify your email to continue with your account access.
               </p>
             </div>
           ) : (
             <div className="mb-4">
-              <h1 className="text-2xl font-bold text-white mb-2">Verify Your Email</h1>
-              <p className="text-sm text-gray-300">
+              <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">Verify Your Email</h1>
+              <p className="text-xs sm:text-sm text-gray-300">
                 We've sent a verification code to {email}
               </p>
             </div>
@@ -249,12 +249,12 @@ function VerifyOTPContent() {
         </div>
 
         {/* OTP Input */}
-        <div className=" bg-opacity-50 backdrop-blur-sm rounded-lg p-6 mb-0">
-          <div className="mb-6">
-            <label className="block text-white text-sm font-medium mb-3">
+        <div className="bg-opacity-50 backdrop-blur-sm rounded-lg p-4 mb-0">
+          <div className="mb-4">
+            <label className="block text-white text-xs sm:text-sm font-medium mb-3">
               Enter 6-digit verification code
             </label>
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-center gap-1 sm:gap-2">
               {otp.map((digit, index) => (
                 <input
                   key={index}
@@ -268,7 +268,7 @@ function VerifyOTPContent() {
                   value={digit}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
-                  className="w-12 h-12 text-center text-xl font-bold border-2  border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none bg-white text-black opacity-50"
+                  className="w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-xl font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none bg-white text-black opacity-50"
                   style={{
                     borderColor: error ? '#ef4444' : '#d1d5db'
                   }}
@@ -279,7 +279,7 @@ function VerifyOTPContent() {
 
           {/* Timer */}
           <div className="text-center mb-4">
-            <p className="text-sm text-white">
+            <p className="text-xs sm:text-sm text-white">
               Code expires in: <span className="font-semibold text-white">
                 {formatRemainingTime(expiryTime)}
               </span>
@@ -290,7 +290,7 @@ function VerifyOTPContent() {
           <button
             onClick={handleSubmit}
             disabled={isSubmitting || otp.join('').length !== 6}
-            className="w-full mobile-btn !text-white !mb-4  disabled:cursor-not-allowed"
+            className="w-full mobile-btn !text-white !mb-3 sm:!mb-4 !text-sm sm:!text-base disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <div className="flex items-center justify-center gap-2">
@@ -306,7 +306,7 @@ function VerifyOTPContent() {
           <button
             onClick={handleResendOTP}
             disabled={!canResend || isSubmitting}
-            className="w-full text-sm text-white hover:text-[#1a1a1a] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full text-xs sm:text-sm text-white hover:text-[#1a1a1a] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {canResend ? (
               'Resend Code'
@@ -318,20 +318,20 @@ function VerifyOTPContent() {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-3 sm:px-4 py-2 sm:py-3 rounded-lg mb-3 sm:mb-4">
             <div className="flex items-center gap-2">
-              <span className="text-xl">⚠️</span>
-              <span>{error}</span>
+              <span className="text-lg sm:text-xl">⚠️</span>
+              <span className="text-xs sm:text-sm">{error}</span>
             </div>
           </div>
         )}
 
         {/* Success Message */}
         {success && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4">
+          <div className="bg-green-100 border border-green-400 text-green-700 px-3 sm:px-4 py-2 sm:py-3 rounded-lg mb-3 sm:mb-4">
             <div className="flex items-center gap-2">
-              <span className="text-xl">✅</span>
-              <span>{success}</span>
+              <span className="text-lg sm:text-xl">✅</span>
+              <span className="text-xs sm:text-sm">{success}</span>
             </div>
           </div>
         )}
@@ -340,14 +340,14 @@ function VerifyOTPContent() {
         <div className="text-center">
           <button
             onClick={handleBackToRegister}
-            className="text-[#CFCFCF] text-sm hover:text-white transition-colors"
+            className="text-[#CFCFCF] text-xs sm:text-sm hover:text-white transition-colors"
           >
             ← Back to Registration
           </button>
         </div>
 
         {/* Help Text */}
-        <div className="mt-8 text-center">
+        <div className="mt-6 sm:mt-8 text-center">
           <p className="text-xs text-[#A8AFC0]">
             Didn't receive the code? Check your spam folder or<br />
             contact support at <span className="text-[#D3D3D3]">support@visaface.online</span>
@@ -362,10 +362,10 @@ function VerifyOTPContent() {
 export default function VerifyOTPPage() {
   return (
     <Suspense fallback={
-      <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-9">
+      <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-6 sm:py-9">
         <div className="w-full text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-sm text-[#3F3F3F] font-medium">
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-white mx-auto mb-3 sm:mb-4"></div>
+          <p className="text-xs sm:text-sm text-[#3F3F3F] font-medium">
             Loading OTP verification page...
           </p>
         </div>
