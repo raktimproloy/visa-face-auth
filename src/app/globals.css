@@ -171,8 +171,9 @@ button{
   font-size: 20px;
   padding: 17px 80px;
   display: inline-block;
-  min-width: 280px;
-  max-width: 90vw;
+  /* min-width: 280px;
+  max-width: 90vw; */
+  width: 100%;
   text-align: center;
   margin: 0 auto;
   font-weight: 600;
@@ -237,8 +238,9 @@ button{
 /* Mobile-specific button styles */
 @media (max-width: 768px) {
   .mobile-btn {
-    min-width: 250px;
-    max-width: 85vw;
+    /* min-width: 250px;
+    max-width: 85vw; */
+    width: 100%;
     padding: 16px 60px;
     font-size: 18px;
     margin: 0 auto;
@@ -273,8 +275,9 @@ button{
 
 @media (max-width: 480px) {
   .mobile-btn {
-    min-width: 220px;
-    max-width: 80vw;
+      /* min-width: 220px;
+      max-width: 80vw; */
+      width: 100%;
     padding: 14px 50px;
     font-size: 16px;
   }
@@ -327,7 +330,8 @@ backdrop-filter: blur(12px);
   font-size: 20px;
   padding: 17px 80px;
   display: inline-block;
-  min-width: 313px;
+  /* min-width: 313px; */
+  width: 100%;
   text-align: center;
   margin: 0 auto;
   font-weight: 600;

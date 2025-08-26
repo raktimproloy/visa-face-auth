@@ -79,14 +79,23 @@ export default function SelfiePolicyPage() {
   return (
     <div className="!bg-[url('/images/mobile/bg-three.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-10">
       <div className="w-full">
-        <Image
+        {/* <Image
           src={"/images/mobile/favicon.svg"}
           alt="logo"
           height={107}
           width={136}
           quality={100}
           className="mx-auto mb-12"
-        />
+        /> */}
+        <div className="col-span-2 mb-10 text-center">
+            <h2 className="text-xl text-white font-bold mb-3">
+            Instructions
+            </h2>
+            <p className="text-sm text-[#CFCFCF]">
+            Please follow the guide below for best <br/>
+             results.
+            </p>
+          </div>
         <div className="grid grid-cols-2 gap-5 max-w-[330px] mx-auto">
           <div className="text-center">
             <Image

@@ -84,100 +84,11 @@ export default function LoginPage() {
   };
 
   return (
-    // <div className="relative !bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-6 bg-dark-overlay">
-    // <Image
-    //   src={"/images/mobile/bg-1.png"}
-    //   alt="logo"
-    //   quality={100}
-    //   fill={true}
-    //   className="mx-auto lg:object-contain object-cover absolute top-0 left-0 blur-xs"
-    // />
-    // <div className="flex justify-end items-center flex-col relative z-10 px-4">
-    //   <form onSubmit={handleLogin} className=" grid grid-cols-1 gap-x-4 max-w-[360px] px-4">
-    //     {/* Header */}
-    //     <div className="col-span-1 mb-14">
-    //       <h3 className="text-2xl font-bold text-white">Login</h3>
-    //       <p className="text-gray-400">Login to your VisaFace account and start entering event effortlessly.</p>
-    //     </div>
-        
-    //     {/* Email */}
-    //     <div className="col-span-1 mb-7">
-    //       <input
-    //         type="email"
-    //         className="form-control-glass"
-    //         id="email"
-    //         name="email"
-    //         placeholder="Enter your email"
-    //         value={email}
-    //         onChange={(e) => setEmail(e.target.value)}
-    //         required
-    //       />
-    //     </div>
-        
-    //     {/* Password */}
-    //     <div className="col-span-1 mb-8">
-    //       <div className="password-input-wrapper">
-    //         <input
-    //           type={showPassword ? "text" : "password"}
-    //           className="form-control-glass pr-12"
-    //           id="password"
-    //           name="password"
-    //           placeholder="Enter your password"
-    //           value={password}
-    //           onChange={(e) => setPassword(e.target.value)}
-    //           required
-    //         />
-    //         <button
-    //           type="button"
-    //           className="password-toggle-btn"
-    //           onClick={() => setShowPassword(!showPassword)}
-    //         >
-    //           {showPassword ? (
-    //             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    //               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    //               <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    //             </svg>
-    //           ) : (
-    //             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    //               <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    //               <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    //             </svg>
-    //           )}
-    //         </button>
-    //       </div>
-
-            
-          
-    //     </div>
-        
-    //     {/* Submit button */}
-    //     <div className="col-span-1 mt-6 text-center">
-    //       <button
-    //         type="submit"
-    //         disabled={isLoading}
-    //         className="mobile-btn !text-white !mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
-    //       >
-    //         {isLoading ? 'Logging in...' : 'Login'}
-    //       </button>
-    //     </div>
-
-    //     {/* Error Message */}
-    //     {error && (
-    //       <div className="col-span-1 mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-center text-sm">
-    //         {error}
-    //       </div>
-    //     )}
-    //   </form>
-    //       <p className="text-md text-[#9C9AA5] mt-4">
-    //                      Don&apos;t have an account? <Link href="/auth/register" className="text-blue-500">Register</Link>
-    //       </p>
-    // </div>
-    // </div>
     <div className="!bg-[url('/images/mobile/bg-two-1.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-6">
       <div className="flex justify-center items-center flex-col">
-        <form  onSubmit={handleLogin} className="grid grid-cols-2 gap-x-4 max-w-[360px]">
+        <form  onSubmit={handleLogin} className="grid grid-cols-2 gap-x-4 max-w-[360px] px-10">
           {/* First name */}
-          <div className="col-span-2 mb-25">
+          <div className="col-span-2 mb-25 text-center">
             <h2 className="text-xl text-white font-bold mb-3">Welcome back!</h2>
             <p className="text-sm text-[#CFCFCF]">
               Login to your VisaFace account and <br />
@@ -243,7 +154,7 @@ export default function LoginPage() {
             disabled={isLoading}
               className="mobile-btn !text-white !mx-auto"
             >
-              {isLoading ? 'Logging in...' : 'Login'}
+              {isLoading ? 'Loading...' : 'Login'}
             </button>
           </div>
           <div className="col-span-2 mt-2 text-center">

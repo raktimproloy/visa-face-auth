@@ -148,9 +148,9 @@ export default function RegisterPage() {
   return (
     <div className="!bg-[url('/images/mobile/bg-two-1.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-6">
       <div className="flex justify-center items-center flex-col">
-        <form className="grid grid-cols-2 gap-x-4 max-w-[360px]">
+        <form className="grid grid-cols-2 gap-x-4 max-w-[360px] px-0">
           {/* First name */}
-          <div className="col-span-2 mb-10">
+          <div className="col-span-2 mb-10 text-center">
             <h2 className="text-xl text-white font-bold mb-3">
               Create Account
             </h2>
@@ -266,7 +266,7 @@ export default function RegisterPage() {
             <label className="flex items-center justify-center gap-3 text-white text-xs">
               <input 
               type="checkbox"
-              className={`${acceptTermsError ? 'border-red-400' : ''}`}
+              className={` ${acceptTermsError ? 'border-red-400' : ''}`}
               id="accept_terms"
               checked={acceptTerms}
               onChange={(e) => setAcceptTerms(e.target.checked)}
@@ -294,10 +294,10 @@ export default function RegisterPage() {
               }}
               type="button"
               disabled={isSubmitting}
-              className="mobile-btn !text-white !mx-auto cursor-pointer"
+              className="mobile-btn !text-white !mx-auto cursor-pointer w-full"
               style={{ pointerEvents: isSubmitting ? 'none' : 'auto' }}
             >
-              {isSubmitting ? 'Creating Account...' : 'Sign Up'}
+              {isSubmitting ? 'Loading...' : 'Sign Up'}
             </button>
           </div>
           <div className="col-span-2 mt-5 text-center">

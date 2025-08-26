@@ -41,7 +41,7 @@ export default function SuccessPage() {
   };
 
   return (
-    <div className="!bg-[url('/images/mobile/bg-four.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
+    <div className="!bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20">
     <div className="w-full text-center">
       <Image
         src={"/logo.svg"}
@@ -51,17 +51,20 @@ export default function SuccessPage() {
         quality={100}
         className="mx-auto mb-12"
       />
-      <h2 className="mt-20 mb-9 text-base text-white font-bold text-center font-inter">
-        Hello {userDisplayData.name},
-      </h2>
-      <p className="text-[15px] text-white font-normal text-center mb-3">
-        Your face has been successfully <br /> enrolled.
-      </p>
-      <p className="text-[15px] text-white font-normal text-center mb-[230px]">
-        From now on, just smile at <br />
-        any of our Verifier screens and <br />
-        you’ll breeze right in.
-      </p>
+      <div className="relative bg-[url('/images/mobile/01.svg')] bg-no-repeat bg-center bg-contain min-h-[400px] sm:min-h-[500px]">
+        <h2 className="pt-20 pb-9 text-base text-white font-bold text-center font-inter">
+          Hello {userDisplayData.name},
+        </h2>
+        <p className="text-[15px] text-white font-normal text-center mb-3">
+          Your face has been successfully <br /> enrolled.
+        </p>
+        <p className="text-[15px] text-white font-normal text-center mb-8">
+          From now on, just smile at <br />
+          any of our Verifier screens and <br />
+          you'll breeze right in.
+        </p>
+      </div>
+
       <Link href={"/auth/final"} className="mobile-btn two !mt-5 !text-white">
         I’m all set
       </Link>
