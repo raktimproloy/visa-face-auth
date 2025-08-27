@@ -316,6 +316,33 @@ input[type="checkbox"].checkbox-error {
   outline: 2px solid #f87171 !important;
   outline-offset: 2px;
 }
+
+/* Custom checkbox styling */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Focus styles for accessibility */
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
 button{
   cursor: pointer;
 }

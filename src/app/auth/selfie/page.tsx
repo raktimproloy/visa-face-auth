@@ -233,7 +233,7 @@ export default function SelfiePage() {
           />
           {/* Face positioning guide - circular dotted green border */}
           <div className="absolute inset-0 -top-35  flex items-center justify-center pointer-events-none">
-            <div className="w-64 h-68 border-5 border-dashed border-green-400 rounded-full opacity-80"></div>
+            <div className="w-[90%] h-[40%] border-5 border-dashed border-green-400 rounded-full opacity-80"></div>
           </div>
           <div className="absolute mt-10 top-0 left-0 right-0">
             <button className="sm-btn">Hold Still</button>

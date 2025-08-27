@@ -93,12 +93,12 @@ export function validateOTPAttempt(
 ): { isValid: boolean; error?: string } {
   // Check if OTP is expired
   if (isOTPExpired(storedOTP.expiresAt)) {
-    return { isValid: false, error: 'OTP has expired. Please request a new one.' };
+    return { isValid: false, error: 'OTP has expired.' };
   }
   
   // Check if max attempts exceeded
   if (storedOTP.attempts >= maxAttempts) {
-    return { isValid: false, error: 'Maximum attempts exceeded. Please request a new OTP.' };
+    return { isValid: false, error: 'Maximum attempts exceeded.' };
   }
   
   // Check if already verified
@@ -108,12 +108,12 @@ export function validateOTPAttempt(
   
   // Validate format
   if (!validateOTPFormat(inputOTP)) {
-    return { isValid: false, error: 'Please enter a valid 6-digit code.' };
+    return { isValid: false, error: 'Enter 6-digit code.' };
   }
   
   // Check if OTP matches
   if (inputOTP !== storedOTP.code) {
-    return { isValid: false, error: 'Invalid OTP code. Please try again.' };
+    return { isValid: false, error: 'Invalid OTP code.' };
   }
   
   return { isValid: true };

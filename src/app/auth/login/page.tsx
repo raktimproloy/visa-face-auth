@@ -121,6 +121,7 @@ export default function LoginPage() {
               type="email"
               className={`form-control ${emailError ? 'border-red-400' : ''}`}
               placeholder="Enter your email"
+              style={{width:"100%"}}
               id="email"
               name="email"
               value={email}

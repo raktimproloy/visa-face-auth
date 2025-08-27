@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { formatRemainingTime, getResendCountdown } from "../../../utils/otpUtils";
+
 import { useAppSelector } from "../../../store/hooks";
 
 // Wrapper component to handle useSearchParams with Suspense
@@ -20,10 +20,9 @@ function VerifyOTPContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [expiryTime, setExpiryTime] = useState<number>(Date.now() + 10 * 60 * 1000); // 10 minutes
-  const [canResend, setCanResend] = useState(false);
+  const [canResend, setCanResend] = useState(true);
   const [resendCountdown, setResendCountdown] = useState(0);
-  const [lastOtpSent, setLastOtpSent] = useState<number>(Date.now());
+  const [otpError, setOtpError] = useState(false);
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -52,19 +51,6 @@ function VerifyOTPContent() {
     }
   }, [customerId, email, router, registrationData]);
 
-  // Countdown timer for OTP expiry
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = Date.now();
-      if (now >= expiryTime) {
-        setError('OTP has expired. Please request a new one.');
-        clearInterval(timer);
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [expiryTime]);
-
   // Countdown timer for resend button
   useEffect(() => {
     if (resendCountdown > 0) {
@@ -82,12 +68,17 @@ function VerifyOTPContent() {
     }
   }, [resendCountdown]);
 
-  // Initialize resend countdown
+  // Auto-hide success and error messages after 5 seconds
   useEffect(() => {
-    const countdown = getResendCountdown(lastOtpSent);
-    setResendCountdown(countdown);
-    setCanResend(countdown === 0);
-  }, [lastOtpSent]);
+    if (success || error) {
+      const timer = setTimeout(() => {
+        setSuccess(null);
+        setError(null);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [success, error]);
 
   const handleOtpChange = (index: number, value: string) => {
     if (value.length > 1) return; // Only allow single digit
@@ -107,6 +98,8 @@ function VerifyOTPContent() {
     }
 
     setError(null); // Clear error when user types
+    setSuccess(null); // Clear success message when user types
+    setOtpError(false); // Clear OTP input error when user types
   };
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -118,7 +111,7 @@ function VerifyOTPContent() {
   const handleSubmit = async () => {
     const otpString = otp.join('');
     if (otpString.length !== 6) {
-      setError('Please enter the complete 6-digit code');
+      setError('Enter 6-digit code');
       return;
     }
 
@@ -140,22 +133,18 @@ function VerifyOTPContent() {
       const result = await response.json();
 
       if (response.ok) {
-        setSuccess('Email verified successfully! Redirecting...');
-        setTimeout(() => {
-          // Check if user has completed biometric enrollment
-          if (registrationData?.biometricStatus === 'completed') {
-            router.push('/auth/final');
-          } else {
-            router.push('/auth/selfie-policy');
-          }
-        }, 2000);
+        if (registrationData?.biometricStatus === 'completed') {
+          router.push('/auth/final');
+        } else {
+          router.push('/auth/selfie-policy');
+        }
       } else {
-        setError(result.error || 'Verification failed. Please try again.');
+        setError(result.error || 'Verification failed.');
         // Focus on first input for retry
         inputRefs.current[0]?.focus();
       }
     } catch (error) {
-      setError('Network error. Please try again.');
+      setError('Network error.');
     } finally {
       setIsSubmitting(false);
     }
@@ -181,22 +170,16 @@ function VerifyOTPContent() {
       const result = await response.json();
 
       if (response.ok) {
-        setSuccess('New OTP sent successfully! Please check your email.');
-        setLastOtpSent(Date.now());
-        setExpiryTime(Date.now() + 10 * 60 * 1000);
-        setCanResend(false);
-        setResendCountdown(60);
+        setSuccess('New OTP sent successfully!');
         setOtp(['', '', '', '', '', '']);
         inputRefs.current[0]?.focus();
+        setResendCountdown(30); // Start 30-second countdown
+        setCanResend(false); // Disable resend button
       } else {
-        if (response.status === 429) {
-          setResendCountdown(result.remainingTime || 60);
-          setCanResend(false);
-        }
-        setError(result.error || 'Failed to resend OTP. Please try again.');
+        setError(result.error || 'Failed to resend OTP.');
       }
     } catch (error) {
-      setError('Network error. Please try again.');
+      setError('Network error.');
     } finally {
       setIsSubmitting(false);
     }
@@ -270,7 +253,7 @@ function VerifyOTPContent() {
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   className="w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-xl font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none bg-white text-black opacity-50"
                   style={{
-                    borderColor: error ? '#ef4444' : '#d1d5db'
+                    borderColor: (error || otpError) ? '#ef4444' : '#d1d5db'
                   }}
                 />
               ))}
@@ -280,22 +263,29 @@ function VerifyOTPContent() {
           {/* Timer */}
           <div className="text-center mb-4">
             <p className="text-xs sm:text-sm text-white">
-              Code expires in: <span className="font-semibold text-white">
-                {formatRemainingTime(expiryTime)}
-              </span>
+              OTP validation time: <span className="font-semibold text-white">10 minutes</span>
             </p>
           </div>
-
+          
+          {/* Error Message */}
+          {error && (
+            <p className="text-xs sm:text-sm text-red-500 text-center mb-3">{error}</p>
+          )}
+          
+          {/* Success Message */}
+          {success && (
+            <p className="text-xs sm:text-sm text-green-500 text-center mb-3">{success}</p>
+          )}
           {/* Submit Button */}
           <button
             onClick={handleSubmit}
-            disabled={isSubmitting || otp.join('').length !== 6}
+            disabled={isSubmitting}
             className="w-full mobile-btn !text-white !mb-3 sm:!mb-4 !text-sm sm:!text-base disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <div className="flex items-center justify-center gap-2">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                Verifying...
+                Loading...
               </div>
             ) : (
               'Verify Email'
@@ -305,36 +295,12 @@ function VerifyOTPContent() {
           {/* Resend Button */}
           <button
             onClick={handleResendOTP}
-            disabled={!canResend || isSubmitting}
+            disabled={isSubmitting || !canResend}
             className="w-full text-xs sm:text-sm text-white hover:text-[#1a1a1a] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {canResend ? (
-              'Resend Code'
-            ) : (
-              `Resend in ${resendCountdown}s`
-            )}
+            {canResend ? 'Resend Code' : `${resendCountdown}s`}
           </button>
         </div>
-
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-3 sm:px-4 py-2 sm:py-3 rounded-lg mb-3 sm:mb-4">
-            <div className="flex items-center gap-2">
-              <span className="text-lg sm:text-xl">⚠️</span>
-              <span className="text-xs sm:text-sm">{error}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Success Message */}
-        {success && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-3 sm:px-4 py-2 sm:py-3 rounded-lg mb-3 sm:mb-4">
-            <div className="flex items-center gap-2">
-              <span className="text-lg sm:text-xl">✅</span>
-              <span className="text-xs sm:text-sm">{success}</span>
-            </div>
-          </div>
-        )}
 
         {/* Back to Register */}
         <div className="text-center">

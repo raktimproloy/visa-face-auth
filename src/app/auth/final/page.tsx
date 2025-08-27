@@ -3,9 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "../../../store/hooks";
+import { clearRegistrationData } from "../../../store/slices/authSlice";
+import { clearAllCookies, clearAuthCookies } from "../../../utils/cookieUtils";
 
 export default function FinalPage() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   // Auth protection - redirect to register if no user data
   const { isAuthenticated, userData } = useAuthProtection();
 
@@ -49,6 +53,45 @@ export default function FinalPage() {
   });
   console.log('FinalPage - Full user data:', userData);
 
+  // Logout function
+  const handleLogout = () => {
+    try {
+      // Clear Redux store
+      dispatch(clearRegistrationData());
+      
+      // Clear localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.clear();
+        // Also clear any specific keys that might exist
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        localStorage.removeItem('registrationData');
+        localStorage.removeItem('token');
+        localStorage.removeItem('jwt');
+      }
+      
+      // Clear all cookies using the utility function
+      clearAllCookies();
+      
+      // Specifically clear authentication cookies
+      clearAuthCookies();
+      
+      // Clear any sessionStorage
+      if (typeof window !== 'undefined') {
+        sessionStorage.clear();
+      }
+      
+      console.log('Logout successful - all data cleared');
+      
+      // Redirect to login page
+      router.push('/auth/login');
+    } catch (error) {
+      console.error('Error during logout:', error);
+      // Even if there's an error, try to redirect to login
+      router.push('/auth/login');
+    }
+  };
+
   return (
     <div className="!bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-25">
     <div className="flex justify-center items-center flex-col text-center">
@@ -60,6 +103,16 @@ export default function FinalPage() {
         <h3 className="md:text-xl text-base text-white font-bold" style={{fontSize:"16px"}}>Effortless Access. Every Time.</h3>
         <p className=" text-sm text-white mt-2" style={{fontSize:"15px"}}>Experience a new, secure <br /> and seamless way to enter.</p>
       </div>
+      
+      {/* Logout Button */}
+      {/* <div className="mt-8">
+        <button
+          onClick={handleLogout}
+          className="text-white text-sm underline hover:text-gray-200 transition-colors"
+        >
+          Logout
+        </button>
+      </div> */}
     </div>
     </div>
   );

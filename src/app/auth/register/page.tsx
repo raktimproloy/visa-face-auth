@@ -255,14 +255,29 @@ export default function RegisterPage() {
 
           <div className="col-span-2 text-center">
             <label className="flex items-center justify-center gap-3 text-white text-xs underline ">
-              <input 
+              {/* <input 
               type="checkbox"
               className={` ${acceptTermsError ? 'checkbox-error' : ''}`}
               id="accept_terms"
               checked={acceptTerms}
               onChange={(e) => setAcceptTerms(e.target.checked)}
               style={{width:"16px",height:"16px",borderRadius:"4px"}}
-              />
+              /> */}
+              <input 
+            type="checkbox" 
+            checked={acceptTerms} 
+            onChange={(e) => setAcceptTerms(e.target.checked)} 
+            className={`
+              w-4 h-4 rounded border-2 transition-all duration-200 cursor-pointer
+              ${acceptTerms 
+                ? 'bg-blue-500 border-blue-500' 
+                : acceptTermsError 
+                  ? 'bg-transparent border-red-400' 
+                  : 'bg-transparent border-white'
+              }
+              focus:outline-none focus:ring-2 focus:ring-blue-300
+            `}
+          />
               Accept term of service
             </label>
           </div>

@@ -164,14 +164,24 @@ export default function SelfiePolicyPage() {
             />
           </div>
         </div>
-        <label className="flex items-center justify-center text-white gap-2 mb-3 text-xs  font-medium max-w-[230px] mx-auto">
-          <input type="checkbox" checked={acceptPrivacyPolicy} onChange={(e) => handlePrivacyPolicyChange(e.target.checked)} style={{width:"16px",height:"16px",borderRadius:"4px"}}/>
+        <label className="flex items-center justify-center text-white gap-2 mb-3 text-xs font-medium max-w-[230px] mx-auto">
+          <input 
+            type="checkbox" 
+            checked={acceptPrivacyPolicy} 
+            onChange={(e) => handlePrivacyPolicyChange(e.target.checked)} 
+            className={`
+              w-4 h-4 rounded border-2 transition-all duration-200 cursor-pointer
+              ${acceptPrivacyPolicy 
+                ? 'bg-blue-500 border-blue-500' 
+                : privacyPolicyError 
+                  ? 'bg-transparent border-red-400' 
+                  : 'bg-transparent border-white'
+              }
+              focus:outline-none focus:ring-2 focus:ring-blue-300
+            `}
+          />
           I agree to the<span className="underline">privacy policy</span>
-          
         </label>
-        {privacyPolicyError && (
-          <p className="text-red-400 text-xs text-center">{privacyPolicyError}</p>
-        )}
         <div className="text-center  mt-20 max-auto">
           <button className="mobile-btn !text-white" style={{fontSize:"14px"}}
           onClick={handleTakeSelfie}
