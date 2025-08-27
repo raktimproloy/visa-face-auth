@@ -42,7 +42,7 @@ export default function SelfieReviewPage() {
     
     // Validate enrollment status and authentication
     if (!userData?.customerId) {
-      setUploadError('Invalid enrollment status. Please register again.');
+      setUploadError('Invalid enrollment status.');
       return;
     }
 
@@ -118,7 +118,7 @@ export default function SelfieReviewPage() {
         console.log('Enrollment approved for user:', userData.customerId);
         
         // Show success message
-        setSuccessMessage('Enrollment successful! Your face verification has been approved.');
+        setSuccessMessage('Your face verification has been approved.');
         
         // Update JWT token with new enrollment data
         try {
@@ -156,7 +156,7 @@ export default function SelfieReviewPage() {
         }
         
         // Show success message and redirect after 2 seconds
-        setSuccessMessage('Enrollment successful! Your face verification has been approved. Redirecting to success page...');
+        setSuccessMessage('Your face verification has been approved.');
         
         // Redirect to success page after 2 seconds
         setTimeout(() => {
@@ -284,7 +284,7 @@ export default function SelfieReviewPage() {
         {/* Success Message */}
         {successMessage && (
           <div className="mb-4 p-4 mt-4 text-green-700 rounded-lg mx-4">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-center">
               <span>{successMessage}</span>
             </div>
           </div>
@@ -293,7 +293,7 @@ export default function SelfieReviewPage() {
         {/* Error Message */}
         {uploadError && (
           <div className=" p-4 mt-4 text-red-700 rounded-lg mx-4">
-            <div className="flex items-center gap-2 text-center">
+            <div className="flex items-center gap-2 text-center justify-center">
               <span>{uploadError}</span>
             </div>
           </div>

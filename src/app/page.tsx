@@ -5,15 +5,15 @@ export default function Home() {
   return (
     <div className="!bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-25">
       <div className="flex justify-center items-center flex-col text-center">
-        <div>
+        <div className="flex flex-col items-center">
           <h2 className="md:text-2xl text-base text-[#DEDEDE] font-bold">
             Welcome To
           </h2>
           <Image
             src={"/logo.svg"}
             alt="logo"
-            height={115}
-            width={300}
+            height={129}
+            width={246}
             quality={100}
           />
           <Image

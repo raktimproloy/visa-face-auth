@@ -51,7 +51,7 @@ export default function SuccessPage() {
         quality={100}
         className="mx-auto mb-5"
       />
-      <div className="relative bg-[url('/images/mobile/01.svg')] bg-no-repeat bg-top bg-contain min-h-[398px] sm:min-h-[335px]">
+      <div className="relative bg-[url('/images/mobile/01.svg')] bg-no-repeat bg-top bg-contain min-h-[398px] sm:min-h-[335px] flex flex-col items-center justify-center">
         <h2 className="pt-10 pb-9 text-base text-white font-bold text-center font-inter" style={{fontSize:"16px"}}>
           Hello {userDisplayData.name},
         </h2>
