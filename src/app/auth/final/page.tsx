@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "../../../store/hooks";
@@ -10,6 +11,7 @@ import { clearAllCookies, clearAuthCookies } from "../../../utils/cookieUtils";
 export default function FinalPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   // Auth protection - redirect to register if no user data
   const { isAuthenticated, userData } = useAuthProtection();
 
@@ -55,6 +57,7 @@ export default function FinalPage() {
 
   // Logout function
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     console.log('Starting logout process...');
     
     try {
@@ -107,10 +110,24 @@ export default function FinalPage() {
 
   return (
     <div className="!bg-[url('/images/mobile/bg-one.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-25">
-            <div className="absolute top-5 right-5">
+      {/* Loading overlay */}
+      {isLoggingOut && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-white/10 backdrop-blur-md rounded-lg p-8 text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
+            <p className="text-white text-lg font-medium">Logging out...</p>
+            <p className="text-white/80 text-sm">Please wait while we clear your session</p>
+          </div>
+        </div>
+      )}
+      
+      <div className="absolute top-5 right-5">
         <button 
           onClick={handleLogout}
-          className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-all duration-200"
+          disabled={isLoggingOut}
+          className={`flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-all duration-200 ${
+            isLoggingOut ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
           title="Logout"
         >
           <svg 
