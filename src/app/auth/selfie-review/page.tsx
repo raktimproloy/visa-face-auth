@@ -269,14 +269,14 @@ export default function SelfieReviewPage() {
       <div className="w-full">
         <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5" style={{fontSize:"12px"}}>Satisfied with your photo?</button>
         
-        <div className="mx-auto max-w-[424px] max-h-[420px] overflow-hidden">
+        <div className="mx-auto max-w-[424px] max-h-[420px] overflow-hidden flex items-center justify-center">
           <Image
             src={photoData || ''}
             alt="Selfie preview"
             width={424}
             height={420}
             quality={100}
-            className="w-full h-auto object-contain"
+            className="w-full h-full object-contain"
             
           />
         </div>
@@ -300,7 +300,7 @@ export default function SelfieReviewPage() {
         )}
         
         {/* Action Buttons - Show Verify Face only if no error, show Re-Take always */}
-        <div className="text-center mt-12 max-auto">
+        <div className="text-center mt-6 max-auto">
           {!uploadError && !successMessage && (
             <button
               onClick={handleUpload}

@@ -233,20 +233,20 @@ export default function SelfiePage() {
           />
           {/* Face positioning guide - circular dotted green border with blur effect */}
           <div className="absolute inset-0 -top-35 flex items-center justify-center pointer-events-none">
-            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" style={{
+            {/* <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" style={{
               maskImage: 'radial-gradient(circle at center, transparent 0%, transparent 35%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.8) 50%, black 70%, black 100%)',
               WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 35%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.8) 50%, black 70%, black 100%)'
-            }}></div>
+            }}></div> */}
             
             {/* Green border circle - visible on top */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-              <div className="w-[90%] h-[40%] rounded-full border-8 border-dashed border-green-400"></div>
+              <div className="w-[90%] h-[40%] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] rounded-full border-8 border-dashed border-green-400"></div>
             </div>
           </div>
-          <div className="absolute mt-10 top-0 left-0 right-0">
+          <div className="absolute mt-15 top-0 left-0 right-0">
             <button className="sm-btn">Hold Still</button>
           </div>
-          <div className="absolute mb-10 bottom-15 left-0 right-0">
+          <div className="absolute mb-20 bottom-15 left-0 right-0">
               
             <button
               onClick={takePhoto}

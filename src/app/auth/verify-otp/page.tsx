@@ -280,7 +280,7 @@ function VerifyOTPContent() {
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="w-full mobile-btn !text-white !mb-3 sm:!mb-4 !text-sm sm:!text-base disabled:cursor-not-allowed"
+            className="w-full mobile-btn !flex items-center gap-2 !text-white !mb-3 sm:!mb-4 !text-sm sm:!text-base disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <div className="flex items-center justify-center gap-2">
@@ -288,7 +288,7 @@ function VerifyOTPContent() {
                 Loading...
               </div>
             ) : (
-              'Verify Email'
+              'Submit'
             )}
           </button>
 
