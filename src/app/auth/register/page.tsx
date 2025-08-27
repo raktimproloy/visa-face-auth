@@ -190,7 +190,7 @@ export default function RegisterPage() {
           <div className="col-span-2 mb-5">
             <div className="relative">
               <span
-                className="right-4 absolute top-3 z-10 cursor-pointer"
+                className="right-4 absolute top-2 z-10 cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 <svg
@@ -223,7 +223,7 @@ export default function RegisterPage() {
           <div className="col-span-2 mb-5">
             <div className="relative">
               <span
-                className="right-4 absolute top-3 z-10 cursor-pointer"
+                className="right-4 absolute top-2 z-10 cursor-pointer"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 <svg
