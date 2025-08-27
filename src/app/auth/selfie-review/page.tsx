@@ -284,7 +284,7 @@ export default function SelfieReviewPage() {
         {/* Success Message */}
         {successMessage && (
           <div className="mb-4 p-4 mt-4 text-green-700 rounded-lg mx-4">
-            <div className="flex items-center gap-2 justify-center">
+            <div className="flex items-center gap-2 justify-center text-center">
               <span>{successMessage}</span>
             </div>
           </div>

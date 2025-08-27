@@ -182,7 +182,7 @@ export default function SelfiePolicyPage() {
           />
           I agree to the<span className="underline">privacy policy</span>
         </label>
-        <div className="text-center  mt-20 max-auto">
+        <div className="text-center  mt-15 max-auto">
           <button className="mobile-btn !text-white" style={{fontSize:"14px"}}
           onClick={handleTakeSelfie}
           >
