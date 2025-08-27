@@ -276,7 +276,7 @@ export default function SelfieReviewPage() {
             width={424}
             height={420}
             quality={100}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain scale-x-[-1]"
             
           />
         </div>
