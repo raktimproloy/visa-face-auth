@@ -231,9 +231,20 @@ export default function SelfiePage() {
               switchCamera: 'Switch camera'
             }}
           />
-          {/* Face positioning guide - circular dotted green border */}
-          <div className="absolute inset-0 -top-35  flex items-center justify-center pointer-events-none">
-            <div className="w-[90%] h-[40%] border-5 border-dashed border-green-400 rounded-full opacity-80"></div>
+          {/* Face positioning guide - circular dotted green border with blur effect */}
+          <div className="absolute inset-0 -top-35 flex items-center justify-center pointer-events-none">
+            {/* Blurred overlay with circular cutout - perfectly aligned with green border */}
+            <div className="absolute inset-0 bg-black" style={{
+              maskImage: 'radial-gradient(circle at center, transparent 0%, transparent 35%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.8) 50%, black 60%, black 100%)',
+              opacity: 0.5,
+              backdropFilter: 'blur(10px)',
+              WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 35%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.8) 50%, black 60%, black 100%)'
+            }}></div>
+            
+            {/* Green border circle - visible on top */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+              <div className="w-[90%] h-[40%] rounded-full border-8 border-dashed border-green-400"></div>
+            </div>
           </div>
           <div className="absolute mt-10 top-0 left-0 right-0">
             <button className="sm-btn">Hold Still</button>
