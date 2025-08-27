@@ -163,6 +163,13 @@ export default function LoginPage() {
               />
             </div>
           </div>
+          
+          {/* Error Message Display */}
+          {error && (
+            <div className="col-span-2 text-red-400 text-sm text-center mb-4">
+              {error}
+            </div>
+          )}
           <div className="col-span-2 mt-12 text-center">
           <button
             type="submit"
