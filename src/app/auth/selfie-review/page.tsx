@@ -10,7 +10,6 @@ import Link from "next/link";
 export default function SelfieReviewPage() {
   // Auth protection - redirect to register if no user data
   const { isAuthenticated, userData } = useAuthProtection();
-  
   const router = useRouter();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -34,6 +33,57 @@ export default function SelfieReviewPage() {
     setUploadError(null);
     setSuccessMessage(null);
     router.push('/auth/selfie');
+  };
+
+  const handleLogout = async () => {
+    console.log('Starting logout process...');
+    
+    try {
+      // Call logout API to clear cookies server-side
+      console.log('Calling logout API...');
+      const response = await fetch('/api/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        console.log('Logout API successful, cookies cleared server-side');
+      } else {
+        console.log('Logout API failed, falling back to client-side clearing');
+      }
+    } catch (error) {
+      console.log('Logout API not available, clearing client-side only:', error);
+    }
+
+    // Clear all accessible cookies with multiple approaches as fallback
+    console.log('Current cookies before clearing:', document.cookie);
+    const cookies = document.cookie.split(";");
+    console.log('Found cookies:', cookies);
+    
+    cookies.forEach(cookie => {
+      const name = cookie.split("=")[0].trim();
+      console.log('Clearing cookie:', name);
+      // Try multiple ways to clear each cookie
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/auth`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/api`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${window.location.hostname}`;
+    });
+
+    console.log('Cookies after clearing:', document.cookie);
+
+    // Clear localStorage
+    localStorage.clear();
+    
+    // Clear sessionStorage
+    sessionStorage.clear();
+
+    // Force a complete page reload to clear everything
+    console.log('Reloading page...');
+    router.push('/auth/login');
   };
 
   const handleUpload = async () => {
@@ -331,7 +381,6 @@ export default function SelfieReviewPage() {
             Re-Take
           </button>
           }
-          
         </div>
       </div>
     </div>

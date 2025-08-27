@@ -42,9 +42,9 @@ export default function RootLayout({
       </head>
       {/* <body suppressHydrationWarning className="!bg-[url('/bg.jpg')] bg-no-repeat bg-cover bg-center min-h-screen"> */}
       <body suppressHydrationWarning>
-        <ReduxProvider>
-          {children}
-        </ReduxProvider>
+          <ReduxProvider>
+            {children}
+          </ReduxProvider>
       </body>
     </html>
   );

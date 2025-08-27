@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useAuthProtection } from "../../../hooks/useAuthProtection";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function SelfiePolicyPage() {
   // Auth protection - redirect to register if no user data
@@ -11,6 +12,58 @@ export default function SelfiePolicyPage() {
   // State for privacy policy checkbox
   const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
   const [privacyPolicyError, setPrivacyPolicyError] = useState("");
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    console.log('Starting logout process...');
+    
+    try {
+      // Call logout API to clear cookies server-side
+      console.log('Calling logout API...');
+      const response = await fetch('/api/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        console.log('Logout API successful, cookies cleared server-side');
+      } else {
+        console.log('Logout API failed, falling back to client-side clearing');
+      }
+    } catch (error) {
+      console.log('Logout API not available, clearing client-side only:', error);
+    }
+
+    // Clear all accessible cookies with multiple approaches as fallback
+    console.log('Current cookies before clearing:', document.cookie);
+    const cookies = document.cookie.split(";");
+    console.log('Found cookies:', cookies);
+    
+    cookies.forEach(cookie => {
+      const name = cookie.split("=")[0].trim();
+      console.log('Clearing cookie:', name);
+      // Try multiple ways to clear each cookie
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/auth`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/api`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${window.location.hostname}`;
+    });
+
+    console.log('Cookies after clearing:', document.cookie);
+
+    // Clear localStorage
+    localStorage.clear();
+    
+    // Clear sessionStorage
+    sessionStorage.clear();
+
+    // Force a complete page reload to clear everything
+    console.log('Reloading page...');
+    router.push('/auth/login');
+  };
 
   // Show loading state while checking auth
   if (!isAuthenticated) {
@@ -78,6 +131,31 @@ export default function SelfiePolicyPage() {
 
   return (
     <div className="!bg-[url('/images/mobile/bg-three.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-10">
+      {/* Logout button in top right */}
+      <div className="absolute top-5 right-5">
+        <button 
+          onClick={handleLogout}
+          className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-all duration-200"
+          title="Logout"
+        >
+          <svg 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            className="text-white"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16,17 21,12 16,7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
+      </div>
+      
       <div className="w-full">
         {/* <Image
           src={"/images/mobile/favicon.svg"}
@@ -189,6 +267,7 @@ export default function SelfiePolicyPage() {
             Take A Selfie
           </button>
         </div>
+
       </div>
     </div>
   );
