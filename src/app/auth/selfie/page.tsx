@@ -234,11 +234,9 @@ export default function SelfiePage() {
           {/* Face positioning guide - circular dotted green border with blur effect */}
           <div className="absolute inset-0 -top-35 flex items-center justify-center pointer-events-none">
             {/* Blurred overlay with circular cutout - perfectly aligned with green border */}
-            <div className="absolute inset-0 bg-black" style={{
-              maskImage: 'radial-gradient(circle at center, transparent 0%, transparent 35%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.8) 50%, black 60%, black 100%)',
-              opacity: 0.5,
-              backdropFilter: 'blur(10px)',
-              WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 35%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.8) 50%, black 60%, black 100%)'
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" style={{
+              maskImage: 'radial-gradient(circle at center, transparent 0%, transparent 35%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.8) 50%, black 70%, black 100%)',
+              WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 35%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.8) 50%, black 70%, black 100%)'
             }}></div>
             
             {/* Green border circle - visible on top */}
