@@ -295,13 +295,26 @@ body {
   outline: none;
   border: none;
   padding: 8px 16px;
-  width: 100%;
+  width: 250px;
+  height: 40px;
   display: block;
+  font-size: 13px;
   font-weight: 500;
   border-radius: 10px;
 background: rgba(255, 255, 255, 0.20);
 backdrop-filter: blur(15px);
 color: #F4F8FC;
+}
+
+.form-control.border-red-400 {
+  border: 2px solid #f87171;
+}
+
+/* Checkbox error styling */
+input[type="checkbox"].checkbox-error {
+  border: 2px solid #f87171 !important;
+  outline: 2px solid #f87171 !important;
+  outline-offset: 2px;
 }
 button{
   cursor: pointer;
@@ -327,11 +340,15 @@ background: rgba(150, 150, 150, 0.20);
 box-shadow: 8px 4px 16px 0 rgba(0, 0, 0, 0.04);
 backdrop-filter: blur(12px);
   color: #FFF;
-  font-size: 20px;
-  padding: 17px 80px;
+  font-size: 16px;
+  /* padding: 17px 80px; */
   display: inline-block;
   /* min-width: 313px; */
-  width: 100%;
+  width: 250px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   margin: 0 auto;
   font-weight: 600;
@@ -341,6 +358,9 @@ backdrop-filter: blur(12px);
     box-shadow: 8px 4px 16px 0 rgba(0, 0, 0, 0.04);
     backdrop-filter: blur(12px);
     color: #323232 !important;
+    width: 250px;
+    height: 38px;
+    font-size: 16px;
   }
 }
 .sm-btn{
@@ -349,17 +369,38 @@ backdrop-filter: blur(12px);
   box-shadow: 8px 4px 16px 0 rgba(0, 0, 0, 0.04);
   backdrop-filter: blur(12px);
   color: #EBEBEB;
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 600;
   display: block;
-  width: 313px;
-  height: 42px;
-  padding: 5px 82px;
+  width: 235px;
+  height: 30px;
+  /* padding: 5px 82px; */
   margin: 0 auto;
   &.two{
     border-radius: 24px;
     background: rgba(205, 204, 204, 0.75);
     box-shadow: 8px 4px 16px 0 rgba(0, 0, 0, 0.04);
     backdrop-filter: blur(12px);
+    width: 218px;
+    height: 38px;
   }
+}
+
+
+.background-with-opacity {
+  position: relative;
+}
+
+.background-with-opacity::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/images/mobile/01.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5; /* 50% opacity */
+  z-index: -1;
 }

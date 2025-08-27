@@ -232,8 +232,8 @@ export default function SelfiePage() {
             }}
           />
           {/* Face positioning guide - circular dotted green border */}
-          <div className="absolute inset-0 -top-20  flex items-center justify-center pointer-events-none">
-            <div className="w-64 h-74 border-5 border-dashed border-green-600 rounded-full opacity-80"></div>
+          <div className="absolute inset-0 -top-35  flex items-center justify-center pointer-events-none">
+            <div className="w-64 h-68 border-5 border-dashed border-green-400 rounded-full opacity-80"></div>
           </div>
           <div className="absolute mt-10 top-0 left-0 right-0">
             <button className="sm-btn">Hold Still</button>
@@ -242,12 +242,12 @@ export default function SelfiePage() {
               
             <button
               onClick={takePhoto}
-              className="mobile-btn !flex items-center gap-2 max-w-[313px] !px-10 mt-0"
+              className="mobile-btn !flex items-center gap-2 max-w-[313px] !px-10 mt-0" style={{fontSize:"14px"}}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="36"
-                height="30"
+                width="28"
+                height="22"
                 viewBox="0 0 45 42"
                 fill="none"
               >

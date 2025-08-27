@@ -46,32 +46,32 @@ export default function SuccessPage() {
       <Image
         src={"/logo.svg"}
         alt="logo"
-        height={107}
+        height={115}
         width={220}
         quality={100}
-        className="mx-auto mb-12"
+        className="mx-auto mb-5"
       />
-      <div className="relative bg-[url('/images/mobile/01.svg')] bg-no-repeat bg-center bg-contain min-h-[400px] sm:min-h-[500px]">
-        <h2 className="pt-20 pb-9 text-base text-white font-bold text-center font-inter">
+      <div className="relative bg-[url('/images/mobile/01.svg')] bg-no-repeat bg-top bg-contain min-h-[398px] sm:min-h-[335px]">
+        <h2 className="pt-10 pb-9 text-base text-white font-bold text-center font-inter" style={{fontSize:"16px"}}>
           Hello {userDisplayData.name},
         </h2>
-        <p className="text-[15px] text-white font-normal text-center mb-3">
+        <p className="text-[15px] text-white font-normal text-center mb-3" style={{fontSize:"15px"}}>
           Your face has been successfully <br /> enrolled.
         </p>
-        <p className="text-[15px] text-white font-normal text-center mb-8">
+        <p className="text-[15px] text-white font-normal text-center mb-8" style={{fontSize:"15px"}}>
           From now on, just smile at <br />
           any of our Verifier screens and <br />
           you'll breeze right in.
         </p>
       </div>
 
-      <Link href={"/auth/final"} className="mobile-btn two !mt-5 !text-white">
+      <Link href={"/auth/final"} className="mobile-btn two !text-white">
         I’m all set
       </Link>
 
       <p className="text-xs text-white mt-4">
         How to Troubleshoot <br />
-        If you ever have trouble, email <i>support@visaface.online</i>
+        If you ever have trouble, email <i className="underline">support@visaface.online</i>
       </p>
     </div>
   </div>

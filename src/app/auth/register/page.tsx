@@ -117,7 +117,7 @@ export default function RegisterPage() {
       if (!response.ok) {
         const errorData = await response.json();
         if (response.status === 409) {
-          setEmailError("This email is already registered. Please use a different email.");
+          setEmailError("email is already registered");
         } else {
           setEmailError(errorData.error || "Registration failed. Please try again.");
         }
@@ -151,10 +151,10 @@ export default function RegisterPage() {
         <form className="grid grid-cols-2 gap-x-4 max-w-[360px] px-0">
           {/* First name */}
           <div className="col-span-2 mb-10 text-center">
-            <h2 className="text-xl text-white font-bold mb-3">
+            <h2 className="text-xl text-white font-bold mb-3" style={{fontSize:"16px"}}>
               Create Account
             </h2>
-            <p className="text-sm text-[#CFCFCF]">
+            <p className="text-sm text-[#CFCFCF]" style={{fontSize:"12px"}}>
               Create your VisaFace account and <br /> start entering event
               effortlessly.
             </p>
@@ -169,9 +169,6 @@ export default function RegisterPage() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
-            {fullNameError && (
-              <p className="text-red-400 text-sm mt-1">{fullNameError}</p>
-            )}
           </div>
 
           {/* Email */}
@@ -185,8 +182,8 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => handleEmailChange(e.target.value)}
             />
-            {emailError && (
-              <p className="text-red-400 text-sm mt-1">{emailError}</p>
+          {emailError && (
+              <p className="text-red-400 text-sm mt-1 text-center w-full">{emailError}</p>
             )}
           </div>
           {/* Password */}
@@ -220,9 +217,6 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {passwordError && (
-                <p className="text-red-400 text-sm mt-1">{passwordError}</p>
-              )}
             </div>
           </div>
           {/* Confirm Password */}
@@ -256,28 +250,24 @@ export default function RegisterPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              {confirmPasswordError && (
-                <p className="text-red-400 text-sm mt-1">{confirmPasswordError}</p>
-              )}
             </div>
           </div>
 
           <div className="col-span-2 text-center">
-            <label className="flex items-center justify-center gap-3 text-white text-xs">
+            <label className="flex items-center justify-center gap-3 text-white text-xs underline ">
               <input 
               type="checkbox"
-              className={` ${acceptTermsError ? 'border-red-400' : ''}`}
+              className={` ${acceptTermsError ? 'checkbox-error' : ''}`}
               id="accept_terms"
               checked={acceptTerms}
               onChange={(e) => setAcceptTerms(e.target.checked)}
+              style={{width:"16px",height:"16px",borderRadius:"4px"}}
               />
               Accept term of service
             </label>
-            {acceptTermsError && (
-              <p className="text-red-400 text-sm mt-1">{acceptTermsError}</p>
-            )}
           </div>
           <div className="col-span-2 mt-12 text-center">
+
             <button
               onClick={(e) => {
                 e.preventDefault();

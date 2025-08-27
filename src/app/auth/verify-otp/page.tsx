@@ -233,8 +233,8 @@ function VerifyOTPContent() {
           {/* Show different message based on flow */}
           {!searchParams.get('customerId') && registrationData ? (
             <div className="mb-4">
-              <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">Email Verification Required</h1>
-              <p className="text-xs sm:text-sm text-gray-300">
+              <h1 className="font-bold text-white mb-2" style={{fontSize:"16px"}}>Email Verification Required</h1>
+              <p className=" text-gray-300" style={{fontSize:"12px"}}>
                 Please verify your email to continue with your account access.
               </p>
             </div>

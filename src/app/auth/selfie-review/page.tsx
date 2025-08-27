@@ -197,7 +197,7 @@ export default function SelfieReviewPage() {
         }
         
         // Show rejection message
-        setUploadError(`Enrollment not approved: ${enrollmentData.verificationResult || 'Please try again with a better photo.'}`);
+        setUploadError(`Please try again with a better photo.`);
       }
       
     } catch (error) {
@@ -267,19 +267,17 @@ export default function SelfieReviewPage() {
   return (
     <div className="!bg-[url('/images/mobile/bg-two.jpg')] bg-no-repeat bg-cover bg-center min-h-screen py-9">
       <div className="w-full">
-        <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5">Satisfied with your photo?</button>
+        <button className="sm-btn two !text-sm !font-normal !text-[#3E3E3E] !px-5 !mb-5" style={{fontSize:"12px"}}>Satisfied with your photo?</button>
         
-        <div className="mx-auto max-h-[500px] overflow-hidden rounded-lg">
+        <div className="mx-auto max-w-[424px] max-h-[420px] overflow-hidden">
           <Image
             src={photoData || ''}
             alt="Selfie preview"
             width={424}
-            height={502}
+            height={420}
             quality={100}
             className="w-full h-auto object-contain"
-            style={{
-              maxHeight: '500px'
-            }}
+            
           />
         </div>
         
@@ -287,7 +285,6 @@ export default function SelfieReviewPage() {
         {successMessage && (
           <div className="mb-4 p-4 mt-4 text-green-700 rounded-lg mx-4">
             <div className="flex items-center gap-2">
-              <span className="text-xl">✅</span>
               <span>{successMessage}</span>
             </div>
           </div>
@@ -295,9 +292,8 @@ export default function SelfieReviewPage() {
         
         {/* Error Message */}
         {uploadError && (
-          <div className="mb-4 p-4 mt-4 text-red-700 rounded-lg mx-4">
-            <div className="flex items-center gap-2">
-              <span className="text-xl">⚠️</span>
+          <div className=" p-4 mt-4 text-red-700 rounded-lg mx-4">
+            <div className="flex items-center gap-2 text-center">
               <span>{uploadError}</span>
             </div>
           </div>
@@ -309,15 +305,15 @@ export default function SelfieReviewPage() {
             <button
               onClick={handleUpload}
               disabled={isUploading}
-              className="mobile-btn !text-[#28A300] !mb-3 !block max-w-[313px] !mx-auto"
+              className="mobile-btn !text-[#28A300] !mb-3 max-w-[260px] max-h-[37px] !mx-auto flex items-center justify-center font-semibold" style={{fontSize:"16px"}}
             >
               {isUploading ? (
                 <div className="flex items-center justify-center gap-2">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#28A300]"></div>
-                  Verifying Face...
+                  Uploading...
                 </div>
               ) : (
-                'Verify Face'
+                'Upload'
               )}
             </button>
           )}
@@ -327,9 +323,10 @@ export default function SelfieReviewPage() {
           <button
             onClick={handleRetake}
             disabled={isUploading}
-            className={`mobile-btn !text-[#B20610] mb-3 !block max-w-[208px] !min-w-[208px] !px-4 !py-3 !mx-auto ${
+            className={`mobile-btn !text-[#B20610] mb-3 flex items-center justify-center max-w-[208px] !min-w-[208px] h-[31px] !px-4 !py-3 !mx-auto ${
               isUploading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
+            style={{fontSize:"15px"}}
           >
             Re-Take
           </button>

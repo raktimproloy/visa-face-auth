@@ -88,10 +88,10 @@ export default function SelfiePolicyPage() {
           className="mx-auto mb-12"
         /> */}
         <div className="col-span-2 mb-10 text-center">
-            <h2 className="text-xl text-white font-bold mb-3">
+            <h2 className="text-xl text-white font-bold mb-3" style={{fontSize:"16px"}}>
             Instructions
             </h2>
-            <p className="text-sm text-[#CFCFCF]">
+            <p className="text-sm text-[#CFCFCF]" style={{fontSize:"12px"}}>
             Please follow the guide below for best <br/>
              results.
             </p>
@@ -105,7 +105,7 @@ export default function SelfiePolicyPage() {
               height={21}
               className="mx-auto h-6"
             />
-            <p className="text-xs text-white font-medium mt-1">
+            <p className="text-xs text-white font-medium mt-1" style={{fontSize:"12px"}}>
               Plain Background
             </p>
           </div>
@@ -117,7 +117,7 @@ export default function SelfiePolicyPage() {
               height={21}
               className="mx-auto h-6"
             />
-            <p className="text-xs text-white font-medium mt-1">
+            <p className="text-xs text-white font-medium mt-1" style={{fontSize:"12px"}}>
               Use neutral expression
             </p>
           </div>
@@ -129,7 +129,7 @@ export default function SelfiePolicyPage() {
               height={21}
               className="mx-auto h-6"
             />
-            <p className="text-xs text-white font-medium mt-1">
+            <p className="text-xs text-white font-medium mt-1" style={{fontSize:"12px"}}>
               Center your face
             </p>
           </div>
@@ -141,10 +141,10 @@ export default function SelfiePolicyPage() {
               height={21}
               className="mx-auto h-6"
             />
-            <p className="text-xs text-white font-medium mt-1">Even lighting</p>
+            <p className="text-xs text-white font-medium mt-1" style={{fontSize:"12px"}}>Even lighting</p>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-5 max-w-[290px] mx-auto mt-12 mb-14">
+        <div className="grid grid-cols-2 gap-5 max-w-[290px] mx-auto mt-12 mb-5">
           <div className="text-center">
             <Image
               src={"/images/01.png"}
@@ -165,15 +165,15 @@ export default function SelfiePolicyPage() {
           </div>
         </div>
         <label className="flex items-center justify-center text-white gap-2 mb-3 text-xs  font-medium max-w-[230px] mx-auto">
-          <input type="checkbox" checked={acceptPrivacyPolicy} onChange={(e) => handlePrivacyPolicyChange(e.target.checked)} />
-          I agree to the privacy policy
+          <input type="checkbox" checked={acceptPrivacyPolicy} onChange={(e) => handlePrivacyPolicyChange(e.target.checked)} style={{width:"16px",height:"16px",borderRadius:"4px"}}/>
+          I agree to the<span className="underline">privacy policy</span>
           
         </label>
         {privacyPolicyError && (
           <p className="text-red-400 text-xs text-center">{privacyPolicyError}</p>
         )}
-        <div className="text-center  mt-12 max-auto">
-          <button className="mobile-btn !text-white"
+        <div className="text-center  mt-20 max-auto">
+          <button className="mobile-btn !text-white" style={{fontSize:"14px"}}
           onClick={handleTakeSelfie}
           >
             Take A Selfie

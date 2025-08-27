@@ -14,11 +14,30 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+    
+    // Clear previous validation errors
+    setEmailError("");
+    setPasswordError("");
+
+    // Validate inputs
+    if (!email) {
+      setEmailError("Please enter your email");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!password) {
+      setPasswordError("Please enter your password");
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch('/api/login', {
@@ -86,7 +105,7 @@ export default function LoginPage() {
   return (
     <div className="!bg-[url('/images/mobile/bg-two-1.jpg')] bg-no-repeat bg-cover bg-center min-h-screen pt-20 pb-6">
       <div className="flex justify-center items-center flex-col">
-        <form  onSubmit={handleLogin} className="grid grid-cols-2 gap-x-4 max-w-[360px] px-10">
+        <form  onSubmit={handleLogin} className="grid grid-cols-2 gap-x-4 max-w-[360px] px-10 justify-center">
           {/* First name */}
           <div className="col-span-2 mb-25 text-center">
             <h2 className="text-xl text-white font-bold mb-3">Welcome back!</h2>
@@ -97,10 +116,10 @@ export default function LoginPage() {
           </div>
 
           {/* Email */}
-          <div className="col-span-2 mb-5">
+          <div className="col-span-2 mb-5 flex justify-center">
             <input
               type="email"
-              className="form-control"
+              className={`form-control ${emailError ? 'border-red-400' : ''}`}
               placeholder="Enter your email"
               id="email"
               name="email"
@@ -110,10 +129,10 @@ export default function LoginPage() {
             />
           </div>
           {/* Password */}
-          <div className="col-span-2 mb-5">
-            <div className="relative">
+          <div className="col-span-2 mb-5 flex justify-center w-full">
+            <div className="relative w-full">
               <span
-                className="right-4 absolute top-3 z-10"
+                className="right-4 absolute top-2 z-10"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 <svg
@@ -133,7 +152,8 @@ export default function LoginPage() {
               </span>
               <input
                 type={showPassword ? "text" : "password"}
-                className="form-control"
+                className={`form-control ${passwordError ? 'border-red-400' : ''}`}
+                style={{width:"100%"}}
                 id="password"
                 name="password"
                 placeholder="Enter your Password"
@@ -143,16 +163,12 @@ export default function LoginPage() {
               />
             </div>
           </div>
-          {error && (
-            <div className="col-span-2 text-red-500 rounded text-center text-sm">
-              {error}
-            </div>
-          )}
-          <div className="col-span-2 mt-20 text-center">
+          <div className="col-span-2 mt-12 text-center">
           <button
             type="submit"
             disabled={isLoading}
               className="mobile-btn !text-white !mx-auto"
+              style={{fontSize:"14px",width:"100%"}}
             >
               {isLoading ? 'Loading...' : 'Login'}
             </button>
@@ -165,7 +181,7 @@ export default function LoginPage() {
               Forgot Password?
             </Link> */}
             <p className="text-[10px] text-[#D5D4D7] mt-20">
-              By logging into my VisaFace account, I accept the Company’s <br />{" "}
+              By logging into my VisaFace account, I accept the Company's <br />{" "}
               <i className="text-[#D1D0D3] font-bold">
                 Terms of use & Privacy Policy.
               </i>
