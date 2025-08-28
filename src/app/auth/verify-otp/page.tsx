@@ -224,8 +224,8 @@ function VerifyOTPContent() {
           ) : (
             <div className="mb-4">
               <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">Verify Your Email</h1>
-              <p className="text-xs sm:text-sm text-gray-300">
-                We've sent a verification code to {email}
+              <p className="text-xs sm:text-sm text-gray-300 text-center">
+                We've sent a verification code to <br/> <span className="text-white font-bold">{email}</span>
               </p>
             </div>
           )}
@@ -234,7 +234,7 @@ function VerifyOTPContent() {
         {/* OTP Input */}
         <div className="bg-opacity-50 backdrop-blur-sm rounded-lg p-4 mb-0">
           <div className="mb-4">
-            <label className="block text-white text-xs sm:text-sm font-medium mb-3">
+            <label className="block text-white text-xs sm:text-sm font-medium mb-3 text-center">
               Enter 6-digit verification code
             </label>
             <div className="flex justify-center gap-1 sm:gap-2">
