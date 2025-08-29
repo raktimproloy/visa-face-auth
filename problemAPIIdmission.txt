@@ -1,0 +1,5 @@
+Verify Priviouly Enrolled
+https://api.idmission.com/v4/customer/Verify
+
+Real-Time Live Face Detection:
+https://api.idmission.com/v4/customer/live-check
